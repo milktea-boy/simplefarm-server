@@ -9,8 +9,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.milkteaboy.simplefarm.netty.entity.Message;
+import org.milkteaboy.simplefarm.netty.handler.ISocketActiveHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketErrorEventHandler;
-import org.milkteaboy.simplefarm.netty.handler.ISocketEventHandler;
+import org.milkteaboy.simplefarm.netty.handler.ISocketMessageEventHandler;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +27,12 @@ public class SocketServer {
 
     // 通道组
     public static ChannelGroup channelGroup;
+    // 连接处理
+    public static ISocketActiveHandler activeHandler;
+    // 关闭连接处理
+    public static ISocketActiveHandler inactiveHandler;
     // 消息派发前事件
-    public static ISocketEventHandler beforeDispatcherHandler;
+    public static ISocketMessageEventHandler beforeDispatcherHandler;
     // 消息处理错误事件
     public static ISocketErrorEventHandler messageErrorHandler;
 
@@ -45,7 +50,9 @@ public class SocketServer {
      * @param beforeDispatcherHandler 消息派发前事件
      * @param errorEventHandler 消息处理错误事件
      */
-    public void startServer(int port, ISocketEventHandler beforeDispatcherHandler, ISocketErrorEventHandler errorEventHandler) {
+    public void startServer(int port, ISocketActiveHandler activeHandler, ISocketActiveHandler inactiveHandler, ISocketMessageEventHandler beforeDispatcherHandler, ISocketErrorEventHandler errorEventHandler) {
+        this.activeHandler = activeHandler;
+        this.inactiveHandler = inactiveHandler;
         this.beforeDispatcherHandler = beforeDispatcherHandler;
         this.messageErrorHandler = errorEventHandler;
 

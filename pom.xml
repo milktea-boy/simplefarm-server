@@ -5,6 +5,7 @@
     <modules>
         <module>simplefarm-netty</module>
         <module>simplefarm-game</module>
+        <module>simplefarm-dao</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -1,7 +1,8 @@
 package org.milkteaboy.simplefarm.netty.config;
 
+import org.milkteaboy.simplefarm.netty.handler.ISocketActiveHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketErrorEventHandler;
-import org.milkteaboy.simplefarm.netty.handler.ISocketEventHandler;
+import org.milkteaboy.simplefarm.netty.handler.ISocketMessageEventHandler;
 import org.milkteaboy.simplefarm.netty.socket.SocketServer;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,12 @@ public class SocketServerBean implements InitializingBean {
 
     // 端口号
     private int port = 8888;
+    // 连接处理
+    private ISocketActiveHandler activeHandler;
+    // 关闭连接处理
+    private ISocketActiveHandler inactiveHandler;
     // 消息派发前处理
-    private ISocketEventHandler beforeDispatcherHandler;
+    private ISocketMessageEventHandler beforeDispatcherHandler;
     // 错误处理
     private ISocketErrorEventHandler errorHandler;
 
@@ -28,8 +33,10 @@ public class SocketServerBean implements InitializingBean {
         this.port = port;
     }
 
-    public SocketServerBean(int port, ISocketEventHandler beforeDispatcherHandler, ISocketErrorEventHandler errorHandler) {
+    public SocketServerBean(int port, ISocketActiveHandler activeHandler, ISocketActiveHandler inactiveHandler, ISocketMessageEventHandler beforeDispatcherHandler, ISocketErrorEventHandler errorHandler) {
         this.port = port;
+        this.activeHandler = activeHandler;
+        this.inactiveHandler = inactiveHandler;
         this.beforeDispatcherHandler = beforeDispatcherHandler;
         this.errorHandler = errorHandler;
     }
@@ -42,11 +49,27 @@ public class SocketServerBean implements InitializingBean {
         this.port = port;
     }
 
-    public ISocketEventHandler getBeforeDispatcherHandler() {
+    public ISocketActiveHandler getActiveHandler() {
+        return activeHandler;
+    }
+
+    public void setActiveHandler(ISocketActiveHandler activeHandler) {
+        this.activeHandler = activeHandler;
+    }
+
+    public ISocketActiveHandler getInactiveHandler() {
+        return inactiveHandler;
+    }
+
+    public void setInactiveHandler(ISocketActiveHandler inactiveHandler) {
+        this.inactiveHandler = inactiveHandler;
+    }
+
+    public ISocketMessageEventHandler getBeforeDispatcherHandler() {
         return beforeDispatcherHandler;
     }
 
-    public void setBeforeDispatcherHandler(ISocketEventHandler beforeDispatcherHandler) {
+    public void setBeforeDispatcherHandler(ISocketMessageEventHandler beforeDispatcherHandler) {
         this.beforeDispatcherHandler = beforeDispatcherHandler;
     }
 
@@ -60,7 +83,7 @@ public class SocketServerBean implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        socketServer.startServer(port, beforeDispatcherHandler, errorHandler);
+        socketServer.startServer(port, activeHandler, inactiveHandler, beforeDispatcherHandler, errorHandler);
     }
 
 }

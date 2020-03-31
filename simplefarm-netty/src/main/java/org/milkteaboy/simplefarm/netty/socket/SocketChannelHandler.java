@@ -7,11 +7,12 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.milkteaboy.simplefarm.netty.constant.Constant;
+import org.milkteaboy.simplefarm.netty.constant.SocketActiveType;
 import org.milkteaboy.simplefarm.netty.constant.SocketErrorType;
 import org.milkteaboy.simplefarm.netty.entity.Message;
 import org.milkteaboy.simplefarm.netty.exception.ArgsParseException;
 import org.milkteaboy.simplefarm.netty.handler.ISocketErrorEventHandler;
-import org.milkteaboy.simplefarm.netty.handler.ISocketEventHandler;
+import org.milkteaboy.simplefarm.netty.handler.ISocketMessageEventHandler;
 import org.milkteaboy.simplefarm.netty.util.SpringUtil;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -34,17 +35,21 @@ public class SocketChannelHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         SocketServer.channelGroup.add(ctx.channel());
+        if (SocketServer.activeHandler != null)
+            SocketServer.activeHandler.handler(ctx, SocketActiveType.ACTIVE);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         SocketServer.channelGroup.remove(ctx.channel());
+        if (SocketServer.activeHandler != null)
+            SocketServer.activeHandler.handler(ctx, SocketActiveType.INACTIVE);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         unRecPingTimes = 0;
-        ISocketEventHandler eventHandler = SocketServer.beforeDispatcherHandler;
+        ISocketMessageEventHandler eventHandler = SocketServer.beforeDispatcherHandler;
 
         Message message = (Message) msg;
 
