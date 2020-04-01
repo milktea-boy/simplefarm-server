@@ -1,15 +1,19 @@
-package org.milkteaboy.simplefarm.game;
+package org.milkteaboy.simplefarm.test;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+/**
+ * 单元测试Springboot启动类
+ */
 @SpringBootApplication(scanBasePackages = {"org.milkteaboy.simplefarm"})
 @MapperScan("org.milkteaboy.simplefarm.dao")
-public class GameApplication {
+public class TestApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GameApplication.class, args);
+        SpringApplication.run(TestApplication.class);
     }
 
 }

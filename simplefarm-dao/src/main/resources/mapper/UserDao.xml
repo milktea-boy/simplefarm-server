@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.milkteaboy.simplefarm.dao.UserDao">
+
+    <resultMap id="userMap" type="org.milkteaboy.simplefarm.entity.User">
+        <id property="id" column="id"/>
+        <association property="account" column="account_id" select="org.milkteaboy.simplefarm.dao.AccountDao.selectById"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.milkteaboy.simplefarm.entity.User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into user(account_id, nickname, level, exp, coin)
+        values(#{account.id}, #{nickname}, #{level}, #{exp}, #{coin})
+    </insert>
+
+    <update id="update" parameterType="org.milkteaboy.simplefarm.entity.User">
+        update user
+        set nickname=#{nickname}, level=#{level}, exp=#{exp}, coin=#{coin}
+        where id=#{id}
+    </update>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="userMap">
+        select * from user
+        where id=#{value}
+    </select>
+
+    <select id="selectByAccountId" parameterType="java.lang.Integer" resultMap="userMap">
+        select * from user
+        where account_id=#{value}
+    </select>
+
+    <select id="selectByNickname" parameterType="java.lang.String" resultMap="userMap">
+        select * from user
+        where nickname=#{value}
+    </select>
+
+</mapper>
