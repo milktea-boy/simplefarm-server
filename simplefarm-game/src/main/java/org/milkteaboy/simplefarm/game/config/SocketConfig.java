@@ -1,6 +1,7 @@
 package org.milkteaboy.simplefarm.game.config;
 
 import io.netty.channel.ChannelHandlerContext;
+import org.milkteaboy.simplefarm.game.constant.StaticData;
 import org.milkteaboy.simplefarm.netty.config.SocketServerBean;
 import org.milkteaboy.simplefarm.netty.constant.SocketActiveType;
 import org.milkteaboy.simplefarm.netty.constant.SocketErrorType;
@@ -35,7 +36,11 @@ public class SocketConfig {
     class ActiveHandler implements ISocketActiveHandler {
         @Override
         public void handler(ChannelHandlerContext ctx, SocketActiveType activeType) {
-
+            // 断线退出登录
+            if (activeType == SocketActiveType.INACTIVE) {
+                if (StaticData.userInfo.containsKey(ctx))
+                    StaticData.userInfo.remove(ctx);
+            }
         }
     }
 

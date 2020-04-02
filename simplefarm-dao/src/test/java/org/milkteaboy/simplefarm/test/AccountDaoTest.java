@@ -26,11 +26,14 @@ public class AccountDaoTest extends Test {
 
     @org.junit.Test
     public void testSelect() {
-        Account account0 = accountDao.selectById(11);
+        Account account0 = accountDao.selectById(13);
         Assert.assertEquals(account0.getUsername(), "test");
 
-        Account account1 = accountDao.selectByUsernameAndPassword("test", "test");
+        Account account1 = accountDao.selectByUsernameAndPassword("test", "123");
         Assert.assertEquals(account1.getUsername(), "test");
+
+        Account account2 = accountDao.selectByUsername("test");
+        Assert.assertEquals(account2.getPassword(), "123");
     }
 
     @org.junit.Test

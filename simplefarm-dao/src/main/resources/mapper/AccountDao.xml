@@ -17,6 +17,11 @@
         select * from account
         where id=#{value}
     </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultType="org.milkteaboy.simplefarm.entity.Account">
+        select * from account
+        where username=#{value}
+    </select>
     
     <select id="selectByUsernameAndPassword" resultType="org.milkteaboy.simplefarm.entity.Account">
         select * from account

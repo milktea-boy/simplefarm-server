@@ -12,6 +12,7 @@ public interface AccountDao {
     int insert(Account account);
     int updatePassword(Account account);
     Account selectById(Integer id);
+    Account selectByUsername(String username);
     Account selectByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
 }

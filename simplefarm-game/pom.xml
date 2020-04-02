@@ -17,6 +17,11 @@
             <artifactId>simplefarm-netty</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.milkteaboy</groupId>
+            <artifactId>simplefarm-service</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
 </project>

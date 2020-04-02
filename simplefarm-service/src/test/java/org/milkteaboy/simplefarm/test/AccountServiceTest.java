@@ -16,8 +16,7 @@ public class AccountServiceTest extends Test {
 
     @org.junit.Test
     public void testRegister() {
-        User user = accountService.register("test", "123", "测试");
-        Assert.assertEquals(user.getNickname(), "测试");
+        accountService.register("test", "123", "测试");
     }
 
     @org.junit.Test
