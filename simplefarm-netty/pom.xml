@@ -11,8 +11,6 @@
 
     <artifactId>simplefarm-netty</artifactId>
 
-    <packaging>pom</packaging>
-
     <dependencies>
         <dependency>
             <groupId>io.netty</groupId>
