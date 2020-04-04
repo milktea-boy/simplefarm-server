@@ -23,7 +23,7 @@ create table user(
 
 #静态配置相关
 
-create table levelup(
+create table user_levelup(
 	`level` int not null comment '等级',
 	`exp` int not null comment '升级所需经验'
 );
@@ -65,29 +65,32 @@ create table seed(
 	foreign key(goods_id) references goods(id)
 );
 
-create table build(
+create table build_levelinfo(
+	`id` int not null comment '建筑ID',
+	`level` int not null comment '建筑等级',
+	`price` int not null comment '价格'
+);
+
+create table build_maxlevel(
 	`user_level` int not null comment '用户等级',
 	`id` int not null comment '建筑ID',
 	`max_level` int not null comment '最大等级'
 );
 
-create table livestock(
+create table livestock_levelinfo(
 	`level` int not null comment '等级',
-	`price` int not null comment '升级价格',
 	`max_population` int not null comment '最大人口数'
 );
 
-create table well(
+create table well_levelinfo(
 	`level` int not null comment '等级',
-	`price` int not null comment '升级价格',
 	`reap_count` int not null comment '一次收获水滴数',
 	`reap_interval` int not null comment '收获时间间隔，单位秒',
 	`max_count` int not null comment '最大水数量'
 );
 
-create table hunter(
+create table hunter_levelinfo(
 	`level` int not null comment '等级',
-	`price` int not null comment '升级价格',
 	`min_receive_count` int not null comment '一次收获最少货物数量',
 	`max_receive_count` int not null comment '一次收获最大货物数量',
 	`receive_interval` int not null comment '收获时间间隔，单位秒'

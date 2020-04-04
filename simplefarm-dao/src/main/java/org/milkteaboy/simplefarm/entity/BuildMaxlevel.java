@@ -1,9 +1,9 @@
 package org.milkteaboy.simplefarm.entity;
 
 /**
- * 建筑配置实体
+ * 建筑最大等级实体
  */
-public class Build {
+public class BuildMaxlevel {
 
     /**用户等级**/
     private Integer userLevel;
@@ -12,10 +12,10 @@ public class Build {
     /**最大等级**/
     private Integer maxLevel;
 
-    public Build() {
+    public BuildMaxlevel() {
     }
 
-    public Build(Integer userLevel, Integer id, Integer maxLevel) {
+    public BuildMaxlevel(Integer userLevel, Integer id, Integer maxLevel) {
         this.userLevel = userLevel;
         this.id = id;
         this.maxLevel = maxLevel;

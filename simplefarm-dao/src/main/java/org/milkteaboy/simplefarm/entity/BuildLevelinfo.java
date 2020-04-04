@@ -1,20 +1,23 @@
 package org.milkteaboy.simplefarm.entity;
 
 /**
- * 货物实体
+ * 建筑等级信息实体
  */
-public class Goods {
+public class BuildLevelinfo {
 
-    /**货物ID**/
+    /**建筑ID**/
     private Integer id;
-    /**货物价格**/
+    /**建筑等级**/
+    private Integer level;
+    /**价格**/
     private Integer price;
 
-    public Goods() {
+    public BuildLevelinfo() {
     }
 
-    public Goods(Integer id, Integer price) {
+    public BuildLevelinfo(Integer id, Integer level, Integer price) {
         this.id = id;
+        this.level = level;
         this.price = price;
     }
 
@@ -24,6 +27,14 @@ public class Goods {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public Integer getPrice() {

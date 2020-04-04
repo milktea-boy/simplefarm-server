@@ -1,24 +1,40 @@
 package org.milkteaboy.simplefarm.entity;
 
 /**
- * 用户建筑实体
+ * 用户建筑信息
  */
 public class UserBuild {
 
-    /**等级**/
+    /**用户ID**/
+    private Integer userId;
+    /**建筑ID**/
+    private Integer buildId;
+    /**建筑等级**/
     private Integer level;
-    /**用户**/
-    private User user;
-    /**建筑**/
-    private Build build;
 
     public UserBuild() {
     }
 
-    public UserBuild(Integer level, User user, Build build) {
+    public UserBuild(Integer userId, Integer buildId, Integer level) {
+        this.userId = userId;
+        this.buildId = buildId;
         this.level = level;
-        this.user = user;
-        this.build = build;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getBuildId() {
+        return buildId;
+    }
+
+    public void setBuildId(Integer buildId) {
+        this.buildId = buildId;
     }
 
     public Integer getLevel() {
@@ -27,21 +43,5 @@ public class UserBuild {
 
     public void setLevel(Integer level) {
         this.level = level;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Build getBuild() {
-        return build;
-    }
-
-    public void setBuild(Build build) {
-        this.build = build;
     }
 }

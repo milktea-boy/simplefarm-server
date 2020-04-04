@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.milkteaboy.simplefarm.dao.UserBuildDao">
+
+    <insert id="insert" parameterType="org.milkteaboy.simplefarm.entity.UserBuild">
+        insert into user_build
+        values(#{userId}, #{buildId}, #{level})
+    </insert>
+
+    <update id="update" parameterType="org.milkteaboy.simplefarm.entity.UserBuild">
+        update user_build
+        set level=#{level}
+        where user_id=#{userId} and build_id=#{buildId}
+    </update>
+
+    <select id="selectByUserIdAndBuildId" resultType="org.milkteaboy.simplefarm.entity.UserBuild">
+        select * from user_build
+        where user_id=#{userId} and build_id=#{buildId}
+    </select>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultType="org.milkteaboy.simplefarm.entity.UserBuild">
+        select * from user_build
+        where user_id=#{value}
+    </select>
+
+</mapper>

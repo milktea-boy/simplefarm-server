@@ -1,19 +1,19 @@
 package org.milkteaboy.simplefarm.entity;
 
 /**
- * 升级配置实体
+ * 用户升级信息实体
  */
-public class Levelup {
+public class UserLevelup {
 
     /**等级**/
     private Integer level;
-    /**升级所需经验**/
+    /**经验**/
     private Integer exp;
 
-    public Levelup() {
+    public UserLevelup() {
     }
 
-    public Levelup(Integer level, Integer exp) {
+    public UserLevelup(Integer level, Integer exp) {
         this.level = level;
         this.exp = exp;
     }
