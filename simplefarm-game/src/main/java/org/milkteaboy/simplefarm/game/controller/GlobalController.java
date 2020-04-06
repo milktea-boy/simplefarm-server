@@ -52,7 +52,7 @@ public class GlobalController {
                 map.put("success", false);
                 map.put("message", "用户未登录");
             } else {
-                int price = buildService.getUpgradePrice(user.getId(), buildId.intValue());
+                int price = buildService.getUpgradePrice(user, buildId.intValue());
                 map.put("success", true);
                 map.put("message", "获取成功");
                 map.put("price", price);
@@ -83,7 +83,7 @@ public class GlobalController {
                 map.put("success", false);
                 map.put("message", "用户未登录");
             } else {
-                buildService.upgrade(user.getId(), buildId.intValue());
+                buildService.upgrade(user, buildId.intValue());
                 map.put("success", true);
                 map.put("message", "升级成功");
             }

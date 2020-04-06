@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * BuildService实现类
  */
@@ -31,17 +33,44 @@ public class BuildServiceImpl implements BuildService {
 
     @Transactional
     @Override
-    public int getUpgradePrice(int userId, int buildId) {
-        // 获取用户信息
-        User user = userDao.selectById(userId);
+    public void initBuildInfo(User user) {
         if (user == null)
-            throw new BuildException("获取用户信息失败");
+            throw new BuildException("用户信息获取失败");
+
+        List<UserBuild> userBuildList = userBuildDao.selectByUserId(user.getId());
+        // 判断是否存在建筑记录
+        UserBuild[] userBuilds = new UserBuild[9];
+        for (UserBuild userBuild : userBuildList) {
+            userBuilds[userBuild.getBuildId()] = userBuild;
+        }
+        for (int i = 0; i < 9; i++) {
+            // 无此记录
+            if (userBuilds[i] == null) {
+                // 插入记录
+                UserBuild userBuild = new UserBuild();
+                userBuild.setUserId(user.getId());
+                userBuild.setBuildId(i);
+                // 家默认1级，其他默认0级
+                if (i == 0)
+                    userBuild.setLevel(1);
+                else
+                    userBuild.setLevel(0);
+                userBuildDao.insert(userBuild);
+            }
+        }
+    }
+
+    @Transactional
+    @Override
+    public int getUpgradePrice(User user, int buildId) {
+        if (user == null)
+            throw new BuildException("用户信息获取失败");
 
         // 判断是否达到当前等级的最大等级
         BuildMaxlevel buildMaxlevel = buildMaxlevelDao.selectByUserLevelAndBuildId(user.getLevel(), buildId);
         if (buildMaxlevel == null)
             throw new BuildException("获取升级信息失败");
-        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(userId, buildId);
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), buildId);
         if (userBuild == null)
             throw new BuildException("获取建筑信息失败");
         if (userBuild.getLevel() >= buildMaxlevel.getMaxLevel())
@@ -57,19 +86,17 @@ public class BuildServiceImpl implements BuildService {
 
     @Transactional
     @Override
-    public void upgrade(int userId, int buildId) {
-        // 获取用户信息
-        User user = userDao.selectById(userId);
+    public void upgrade(User user, int buildId) {
         if (user == null)
-            throw new BuildException("获取用户信息失败");
+            throw new BuildException("用户信息获取失败");
 
         // 判断金币是否足够
-        int price = getUpgradePrice(userId, buildId);
+        int price = getUpgradePrice(user, buildId);
         if (user.getCoin() < price)
             throw new BuildException("金币不足");
 
         // 获取建筑信息
-        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(userId, buildId);
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), buildId);
         if (userBuild == null)
             throw new BuildException("获取建筑信息失败");
 

@@ -5,6 +5,7 @@ import org.milkteaboy.simplefarm.dao.BuildMaxlevelDao;
 import org.milkteaboy.simplefarm.entity.BuildMaxlevel;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 public class BuildMaxlevelDaoTest extends Test {
 

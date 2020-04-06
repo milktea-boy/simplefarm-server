@@ -1,23 +1,31 @@
 package org.milkteaboy.simplefarm.service;
 
+import org.milkteaboy.simplefarm.entity.User;
+
 /**
  * 建筑Service
  */
 public interface BuildService {
 
     /**
+     * 初始化用户建筑信息，在用户新注册时调用
+     * @param user 用户
+     */
+    void initBuildInfo(User user);
+
+    /**
      * 获取升级价格
-     * @param userId 用户ID
+     * @param user 用户
      * @param buildId 建筑ID
      * @return 价格
      */
-    int getUpgradePrice(int userId, int buildId);
+    int getUpgradePrice(User user, int buildId);
 
     /**
      * 升级建筑
-     * @param userId 用户ID
+     * @param user 用户
      * @param buildId 建筑ID
      */
-    void upgrade(int userId, int buildId);
+    void upgrade(User user, int buildId);
 
 }

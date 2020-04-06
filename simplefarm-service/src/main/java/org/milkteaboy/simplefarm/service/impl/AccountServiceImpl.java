@@ -5,6 +5,7 @@ import org.milkteaboy.simplefarm.dao.UserDao;
 import org.milkteaboy.simplefarm.entity.Account;
 import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.service.AccountService;
+import org.milkteaboy.simplefarm.service.BuildService;
 import org.milkteaboy.simplefarm.service.exception.AccountException;
 import org.milkteaboy.simplefarm.service.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class AccountServiceImpl implements AccountService {
     private AccountDao accountDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private BuildService buildService;
 
     @Override
     public User login(String username, String password) {
@@ -74,6 +77,9 @@ public class AccountServiceImpl implements AccountService {
         int userResult = userDao.insert(user);
         if (userResult < 1)
             throw new AccountException("注册失败");
+
+        // 插入建筑信息
+        buildService.initBuildInfo(user);
     }
 
     @Transactional

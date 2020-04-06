@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.milkteaboy.simplefarm.dao.WarehouseDao">
+
+    <!--幼崽类型-->
+    <resultMap id="resultBaby" type="org.milkteaboy.simplefarm.entity.Warehouse">
+        <result property="objectId" column="object_id"/>
+        <association property="object" column="object_id" select="org.milkteaboy.simplefarm.dao.BabyDao.selectById"/>
+    </resultMap>
+    <!--种子类型-->
+    <resultMap id="resultSeed" type="org.milkteaboy.simplefarm.entity.Warehouse">
+        <result property="objectId" column="object_id"/>
+        <association property="object" column="object_id" select="org.milkteaboy.simplefarm.dao.SeedDao.selectById"/>
+    </resultMap>
+    <!--食物类型-->
+    <resultMap id="resultFood" type="org.milkteaboy.simplefarm.entity.Warehouse">
+        <result property="objectId" column="object_id"/>
+        <association property="object" column="object_id" select="org.milkteaboy.simplefarm.dao.FoodDao.selectById"/>
+    </resultMap>
+    <!--货物类型-->
+    <resultMap id="resultGoods" type="org.milkteaboy.simplefarm.entity.Warehouse">
+        <result property="objectId" column="object_id"/>
+        <association property="object" column="object_id" select="org.milkteaboy.simplefarm.dao.GoodsDao.selectById"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.milkteaboy.simplefarm.entity.Warehouse">
+        insert into warehouse
+        values(#{userId}, #{objectType}, #{objectId}, #{count})
+    </insert>
+    
+    <delete id="delete" parameterType="org.milkteaboy.simplefarm.entity.Warehouse">
+        delete from warehouse
+        where user_id=#{userId} and object_type=#{objectType} and object_id=#{objectId}
+    </delete>
+
+    <update id="update" parameterType="org.milkteaboy.simplefarm.entity.Warehouse">
+        update warehouse
+        set count=#{count}
+        where user_id=#{userId} and object_type=#{objectType} and object_id=#{objectId}
+    </update>
+
+    <select id="selectOne" resultType="org.milkteaboy.simplefarm.entity.Warehouse">
+        select * from warehouse
+        where user_id=#{userId} and object_type=#{objectType} and object_id=#{objectId}
+    </select>
+
+    <select id="selectBaby" resultMap="resultBaby">
+        select * from warehouse
+        where user_id=#{userId} and object_type=0
+    </select>
+
+    <select id="selectSeed" resultMap="resultSeed">
+        select * from warehouse
+        where user_id=#{userId} and object_type=1
+    </select>
+
+    <select id="selectFood" resultMap="resultFood">
+        select * from warehouse
+        where user_id=#{userId} and object_type=2
+    </select>
+
+    <select id="selectGoods" resultMap="resultGoods">
+        select * from warehouse
+        where user_id=#{userId} and object_type=3
+    </select>
+
+</mapper>
