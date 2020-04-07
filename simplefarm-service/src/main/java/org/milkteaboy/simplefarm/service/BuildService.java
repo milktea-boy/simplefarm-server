@@ -14,6 +14,14 @@ public interface BuildService {
     void initBuildInfo(User user);
 
     /**
+     * 获取建筑等级
+     * @param user 用户
+     * @param buildId 建筑ID
+     * @return 等级
+     */
+    int getBuildLevel(User user, int buildId);
+
+    /**
      * 获取升级价格
      * @param user 用户
      * @param buildId 建筑ID

@@ -1,6 +1,10 @@
 package org.milkteaboy.simplefarm.service;
 
 import org.milkteaboy.simplefarm.entity.*;
+import org.milkteaboy.simplefarm.service.dto.ShopBabyInfo;
+import org.milkteaboy.simplefarm.service.dto.ShopFoodInfo;
+import org.milkteaboy.simplefarm.service.dto.ShopGoodsInfo;
+import org.milkteaboy.simplefarm.service.dto.ShopSeedInfo;
 
 import java.util.List;
 
@@ -26,6 +30,14 @@ public interface ShopService {
     void buySeed(User user, int seedId, int count);
 
     /**
+     * 购买食物
+     * @param user 用户
+     * @param foodId 食物ID
+     * @param count 数量
+     */
+    void buyFood(User user, int foodId, int count);
+
+    /**
      * 卖出货物
      * @param user 用户
      * @param goodsId 货物ID
@@ -37,25 +49,25 @@ public interface ShopService {
      * 获取可购买的幼崽信息
      * @return 幼崽列表
      */
-    List<Baby> getBabyInfo();
+    List<ShopBabyInfo> getBabyInfo();
 
     /**
      * 获取可购买的种子信息
      * @return 种子列表
      */
-    List<Seed> getSeedInfo();
+    List<ShopSeedInfo> getSeedInfo();
 
     /**
      * 获取可购买的食物信息
      * @return 食物列表
      */
-    List<Food> getFoodInfo();
+    List<ShopFoodInfo> getFoodInfo();
 
     /**
      * 获取用户货物信息
      * @param user 用户
      * @return 货物列表
      */
-    List<Warehouse> getUserGoodsInfo(User user);
+    List<ShopGoodsInfo> getUserGoodsInfo(User user);
 
 }

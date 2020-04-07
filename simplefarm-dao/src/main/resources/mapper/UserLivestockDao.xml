@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.milkteaboy.simplefarm.dao.UserLivestockDao">
+
+    <insert id="insert" parameterType="org.milkteaboy.simplefarm.entity.UserLivestock">
+        insert into user_livestock
+        values(#{userId}, #{buildId}, #{babyId}, #{count}, #{feedCount}, #{breedDatetime}, #{goodsCount})
+    </insert>
+
+    <update id="update" parameterType="org.milkteaboy.simplefarm.entity.UserLivestock">
+        update user_livestock
+        set baby_id=#{babyId}, count=#{count}, feed_count=#{feedCount}, breed_datetime=#{breedDatetime}, goods_count=#{goodsCount}
+        where user_id=#{userId} and build_id=#{buildId}
+    </update>
+
+    <select id="selectByUserIdAndBuildId" resultType="org.milkteaboy.simplefarm.entity.UserLivestock">
+        select * from user_livestock
+        where user_id=#{userId} and build_id=#{buildId}
+    </select>
+
+</mapper>

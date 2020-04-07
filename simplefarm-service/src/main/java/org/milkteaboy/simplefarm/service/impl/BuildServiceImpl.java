@@ -60,6 +60,18 @@ public class BuildServiceImpl implements BuildService {
         }
     }
 
+    @Override
+    public int getBuildLevel(User user, int buildId) {
+        if (user == null)
+            throw new BuildException("用户信息获取失败");
+
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), buildId);
+        if (userBuild == null)
+            throw new BuildException("获取建筑信息失败");
+
+        return userBuild.getLevel();
+    }
+
     @Transactional
     @Override
     public int getUpgradePrice(User user, int buildId) {

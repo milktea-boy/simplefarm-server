@@ -5,7 +5,10 @@ import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.game.constant.StaticData;
 import org.milkteaboy.simplefarm.netty.socket.SocketServer;
 import org.milkteaboy.simplefarm.service.BuildService;
+import org.milkteaboy.simplefarm.service.UserService;
+import org.milkteaboy.simplefarm.service.dto.UserDetailInfo;
 import org.milkteaboy.simplefarm.service.exception.BuildException;
+import org.milkteaboy.simplefarm.service.exception.UserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -20,6 +23,8 @@ public class GlobalController {
 
     @Autowired
     private SocketServer socketServer;
+    @Autowired
+    private UserService userService;
     @Autowired
     private BuildService buildService;
 
@@ -36,7 +41,34 @@ public class GlobalController {
      * @param ctx 通道
      */
     public void farmDetailInfo(ChannelHandlerContext ctx) {
-
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            User user = StaticData.userInfo.get(ctx);
+            if (user == null) {
+                map.put("success", false);
+                map.put("message", "用户未登录");
+            } else {
+                UserDetailInfo userDetailInfo = userService.getUserDetailInfo(user);
+                map.put("success", true);
+                map.put("message", "获取成功");
+                map.put("userId", userDetailInfo.getUserId());
+                map.put("nickname", userDetailInfo.getNickname());
+                map.put("level", userDetailInfo.getLevel());
+                map.put("exp", userDetailInfo.getExp());
+                map.put("needExp", userDetailInfo.getExp());
+                map.put("coin", userDetailInfo.getCoin());
+            }
+        } catch (UserException e) {
+            map.clear();
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        } catch (Exception e) {
+            map.clear();
+            map.put("success", false);
+            map.put("message", "获取用户详细信息失败");
+            e.printStackTrace();
+        }
+        socketServer.sendMessage(ctx, "global/farmDetailInfo", map);
     }
 
     /**

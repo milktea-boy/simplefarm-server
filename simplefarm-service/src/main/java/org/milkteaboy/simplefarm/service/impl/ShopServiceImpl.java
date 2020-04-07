@@ -3,15 +3,22 @@ package org.milkteaboy.simplefarm.service.impl;
 import org.milkteaboy.simplefarm.dao.*;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.ShopService;
+import org.milkteaboy.simplefarm.service.dto.ShopBabyInfo;
+import org.milkteaboy.simplefarm.service.dto.ShopFoodInfo;
+import org.milkteaboy.simplefarm.service.dto.ShopGoodsInfo;
+import org.milkteaboy.simplefarm.service.dto.ShopSeedInfo;
 import org.milkteaboy.simplefarm.service.exception.ShopException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * ShopService实现类
  */
+@Service("shopService")
 public class ShopServiceImpl implements ShopService {
 
     @Autowired
@@ -30,6 +37,8 @@ public class ShopServiceImpl implements ShopService {
     @Transactional
     @Override
     public void buyBaby(User user, int babyId, int count) {
+        if (count <= 0)
+            throw new ShopException("数量不能小于1");
         if (user == null)
             throw new ShopException("用户信息获取失败");
 
@@ -65,6 +74,8 @@ public class ShopServiceImpl implements ShopService {
     @Transactional
     @Override
     public void buySeed(User user, int seedId, int count) {
+        if (count <= 0)
+            throw new ShopException("数量不能小于1");
         if (user == null)
             throw new ShopException("用户信息获取失败");
 
@@ -99,7 +110,50 @@ public class ShopServiceImpl implements ShopService {
 
     @Transactional
     @Override
+    public void buyFood(User user, int foodId, int count) {
+        if (count <= 0)
+            throw new ShopException("数量不能小于1");
+        // 过滤水
+        if (foodId == 1)
+            throw new ShopException("水不可购买");
+
+        if (user == null)
+            throw new ShopException("用户信息获取失败");
+
+        // 获取食物信息
+        Food food = foodDao.selectById(foodId);
+        if (food == null)
+            throw new ShopException("食物ID错误");
+        // 判断金币是否足够
+        int price = food.getPrice() * count;
+        if (user.getCoin() < price)
+            throw new ShopException("金币不足");
+
+        // 购买操作
+        user.setCoin(user.getCoin() - price);
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 2, foodId);
+        if (warehouse != null) {
+            warehouse.setCount(warehouse.getCount() + count);
+
+            warehouseDao.update(warehouse);
+            userDao.update(user);
+        } else {
+            warehouse = new Warehouse();
+            warehouse.setUserId(user.getId());
+            warehouse.setObjectType(2);
+            warehouse.setObjectId(foodId);
+            warehouse.setCount(count);
+
+            warehouseDao.insert(warehouse);
+            userDao.update(user);
+        }
+    }
+
+    @Transactional
+    @Override
     public void sellGoods(User user, int goodsId, int count) {
+        if (count <= 0)
+            throw new ShopException("数量不能小于1");
         if (user == null)
             throw new ShopException("用户信息获取失败");
 
@@ -135,21 +189,33 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public List<Baby> getBabyInfo() {
+    public List<ShopBabyInfo> getBabyInfo() {
         List<Baby> babyList = babyDao.selectAll();
+        List<ShopBabyInfo> babyOutputList = new ArrayList<>();
+        for (Baby baby : babyList) {
+            ShopBabyInfo shopBabyInfo = new ShopBabyInfo();
+            shopBabyInfo.setId(baby.getId());
+            shopBabyInfo.setPrice(baby.getPrice());
+        }
 
-        return babyList;
+        return babyOutputList;
     }
 
     @Override
-    public List<Seed> getSeedInfo() {
+    public List<ShopSeedInfo> getSeedInfo() {
         List<Seed> seedList = seedDao.selectAll();
+        List<ShopSeedInfo> seedOutputList = new ArrayList<>();
+        for (Seed seed : seedList) {
+            ShopSeedInfo shopSeedInfo = new ShopSeedInfo();
+            shopSeedInfo.setId(seed.getId());
+            shopSeedInfo.setPrice(seed.getPrice());
+        }
 
-        return seedList;
+        return seedOutputList;
     }
 
     @Override
-    public List<Food> getFoodInfo() {
+    public List<ShopFoodInfo> getFoodInfo() {
         List<Food> foodList = foodDao.selectAll();
         // 排除水
         for (Food food : foodList) {
@@ -158,15 +224,31 @@ public class ShopServiceImpl implements ShopService {
                 break;
             }
         }
+        List<ShopFoodInfo> foodOutputList = new ArrayList<>();
+        for (Food food : foodList) {
+            ShopFoodInfo shopFoodInfo = new ShopFoodInfo();
+            shopFoodInfo.setId(food.getId());
+            shopFoodInfo.setPrice(food.getPrice());
+        }
 
-        return foodList;
+        return foodOutputList;
     }
 
     @Override
-    public List<Warehouse> getUserGoodsInfo(User user) {
+    public List<ShopGoodsInfo> getUserGoodsInfo(User user) {
         List<Warehouse> warehouseList = warehouseDao.selectGoods(user.getId());
+        List<ShopGoodsInfo> shopGoodsInfos = new ArrayList<>();
+        for (Warehouse warehouse : warehouseList) {
+            ShopGoodsInfo shopGoodsInfo = new ShopGoodsInfo();
+            shopGoodsInfo.setId(warehouse.getObjectId());
+            shopGoodsInfo.setCount(warehouse.getCount());
+            Goods goods = goodsDao.selectById(warehouse.getObjectId());
+            if (goods == null)
+                throw new ShopException("货物货物信息失败");
+            shopGoodsInfo.setPrice(goods.getPrice());
+        }
 
-        return warehouseList;
+        return shopGoodsInfos;
     }
 
 }

@@ -121,6 +121,7 @@ create table user_livestock(
 	`count` int not null comment '幼崽数量',
 	`feed_count` int not null comment '当前喂养次数',
 	`breed_datetime` datetime not null comment '养殖时间',
+	`goods_count` int not null comment '货物数量',
 	foreign key(user_id) references user(id)
 );
 
@@ -130,6 +131,7 @@ create table user_ground(
 	`seed_id` int not null comment '种子ID',
 	`water_count` int not null comment '浇水次数',
 	`sow_datetime` datetime not null comment '播种时间',
+	`goods_count` int not null comment '货物数量',
 	foreign key(user_id) references user(id),
 	foreign key(seed_id) references seed(id)
 );
