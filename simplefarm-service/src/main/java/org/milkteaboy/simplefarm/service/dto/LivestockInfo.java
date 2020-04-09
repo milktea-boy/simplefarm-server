@@ -14,6 +14,8 @@ public class LivestockInfo {
     private int state;
     /**可养殖的幼崽列表，state为0时存在**/
     private List<WarehouseBabyInfo> babyList;
+    /**最大人口数**/
+    private int maxPopuplation;
     /**开始时间，state为1时存在**/
     private Date startDateTime;
     /**结束时间，state为1时存在**/
@@ -22,21 +24,25 @@ public class LivestockInfo {
     private int feedCount;
     /**喂养最大次数，state为1时存在**/
     private int feedMaxCount;
-    /**货物列表，state为2时存在**/
-    private List<WarehouseGoodsInfo> goodsList;
+    /**货物ID，state为2时存在**/
+    private int goodsId;
+    /**货物数量，state为2时存在**/
+    private int count;
 
     public LivestockInfo() {
     }
 
-    public LivestockInfo(int buildLevel, int state, List<WarehouseBabyInfo> babyList, Date startDateTime, Date finishDateTime, int feedCount, int feedMaxCount, List<WarehouseGoodsInfo> goodsList) {
+    public LivestockInfo(int buildLevel, int state, List<WarehouseBabyInfo> babyList, int maxPopuplation, Date startDateTime, Date finishDateTime, int feedCount, int feedMaxCount, int goodsId, int count) {
         this.buildLevel = buildLevel;
         this.state = state;
         this.babyList = babyList;
+        this.maxPopuplation = maxPopuplation;
         this.startDateTime = startDateTime;
         this.finishDateTime = finishDateTime;
         this.feedCount = feedCount;
         this.feedMaxCount = feedMaxCount;
-        this.goodsList = goodsList;
+        this.goodsId = goodsId;
+        this.count = count;
     }
 
     public int getBuildLevel() {
@@ -61,6 +67,14 @@ public class LivestockInfo {
 
     public void setBabyList(List<WarehouseBabyInfo> babyList) {
         this.babyList = babyList;
+    }
+
+    public int getMaxPopuplation() {
+        return maxPopuplation;
+    }
+
+    public void setMaxPopuplation(int maxPopuplation) {
+        this.maxPopuplation = maxPopuplation;
     }
 
     public Date getStartDateTime() {
@@ -95,11 +109,19 @@ public class LivestockInfo {
         this.feedMaxCount = feedMaxCount;
     }
 
-    public List<WarehouseGoodsInfo> getGoodsList() {
-        return goodsList;
+    public int getGoodsId() {
+        return goodsId;
     }
 
-    public void setGoodsList(List<WarehouseGoodsInfo> goodsList) {
-        this.goodsList = goodsList;
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

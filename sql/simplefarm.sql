@@ -128,12 +128,11 @@ create table user_livestock(
 create table user_ground(
 	`user_id` int not null comment '用户ID',
 	`index` int not null comment '地块序号',
-	`seed_id` int not null comment '种子ID',
+	`seed_id` int not null comment '种子ID，-1代表未养殖',
 	`water_count` int not null comment '浇水次数',
 	`sow_datetime` datetime not null comment '播种时间',
 	`goods_count` int not null comment '货物数量',
-	foreign key(user_id) references user(id),
-	foreign key(seed_id) references seed(id)
+	foreign key(user_id) references user(id)
 );
 
 create table user_well(

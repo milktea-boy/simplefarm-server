@@ -6,6 +6,7 @@ import org.milkteaboy.simplefarm.entity.Account;
 import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.service.AccountService;
 import org.milkteaboy.simplefarm.service.BuildService;
+import org.milkteaboy.simplefarm.service.LivestockService;
 import org.milkteaboy.simplefarm.service.exception.AccountException;
 import org.milkteaboy.simplefarm.service.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class AccountServiceImpl implements AccountService {
     private UserDao userDao;
     @Autowired
     private BuildService buildService;
+    @Autowired
+    private LivestockService livestockService;
 
     @Override
     public User login(String username, String password) {
@@ -80,6 +83,8 @@ public class AccountServiceImpl implements AccountService {
 
         // 插入建筑信息
         buildService.initBuildInfo(user);
+        // 插入畜舍信息
+        livestockService.initLivestockInfo(user);
     }
 
     @Transactional

@@ -2,11 +2,18 @@ package org.milkteaboy.simplefarm.service;
 
 import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.service.dto.LivestockInfo;
+import org.milkteaboy.simplefarm.service.dto.LivestockReapInfo;
 
 /**
  * 畜舍Service
  */
 public interface LivestockService {
+
+    /**
+     * 初始化畜舍信息
+     * @param user 用户
+     */
+    void initLivestockInfo(User user);
 
     /**
      * 获取畜舍信息
@@ -36,7 +43,8 @@ public interface LivestockService {
      * 收获
      * @param user 用户
      * @param livestockId 畜舍ID，0-畜舍1，1-畜舍2
+     * @return 收获信息
      */
-    void reap(User user, int livestockId);
+    LivestockReapInfo reap(User user, int livestockId);
 
 }

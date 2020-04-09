@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.milkteaboy.simplefarm.dao.UserGroundDao">
+
+    <resultMap id="userGround" type="org.milkteaboy.simplefarm.entity.UserGround">
+        <association property="seed" column="seed_id" select="org.milkteaboy.simplefarm.dao.SeedDao.selectById"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.milkteaboy.simplefarm.entity.UserGround">
+        insert into user_ground
+        values(#{userId}, #{index}, #{seed.id}, #{waterCount}, #{sowDatetime}, #{goodsCount})
+    </insert>
+
+    <update id="update" parameterType="org.milkteaboy.simplefarm.entity.UserGround">
+        update user_ground
+        set seed_id=#{seed.id}, water_count=#{waterCount}, sow_datetime=#{sowDatetime}, goods_count=#{goodsCount}
+    </update>
+
+    <select id="selectByUserIdAndIndex" resultMap="userGround">
+        select * from user_ground
+        where user_id=#{userId} and `index`=#{index}
+    </select>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="userGround">
+        select * from user_ground
+        where user_id=#{value}
+    </select>
+
+</mapper>
