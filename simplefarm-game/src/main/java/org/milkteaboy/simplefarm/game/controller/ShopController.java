@@ -45,7 +45,7 @@ public class ShopController {
                 map.put("success", false);
                 map.put("message", "用户未登录");
             } else {
-                List<ShopBabyInfo> babyList = shopService.getBabyInfo();
+                List<ShopBabyInfo> babyList = shopService.getBabyInfo(user);
                 int level = buildService.getBuildLevel(user, 1);
                 map.put("success", true);
                 map.put("message", "获取成功");
@@ -81,7 +81,7 @@ public class ShopController {
                 map.put("success", false);
                 map.put("message", "用户未登录");
             } else {
-                List<ShopSeedInfo> seedList = shopService.getSeedInfo();
+                List<ShopSeedInfo> seedList = shopService.getSeedInfo(user);
                 int level = buildService.getBuildLevel(user, 1);
                 map.put("success", true);
                 map.put("message", "获取成功");
@@ -117,7 +117,7 @@ public class ShopController {
                 map.put("success", false);
                 map.put("message", "用户未登录");
             } else {
-                List<ShopFoodInfo> foodList = shopService.getFoodInfo();
+                List<ShopFoodInfo> foodList = shopService.getFoodInfo(user);
                 int level = buildService.getBuildLevel(user, 1);
                 map.put("success", true);
                 map.put("message", "获取成功");

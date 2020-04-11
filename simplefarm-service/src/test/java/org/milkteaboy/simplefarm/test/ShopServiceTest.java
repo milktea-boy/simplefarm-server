@@ -45,19 +45,22 @@ public class ShopServiceTest extends Test {
 
     @org.junit.Test
     public void testGetBabyInfo() {
-        List<ShopBabyInfo> babyList = shopService.getBabyInfo();
+        User user = userDao.selectById(2);
+        List<ShopBabyInfo> babyList = shopService.getBabyInfo(user);
         Assert.assertEquals(babyList.size(), 2);
     }
 
     @org.junit.Test
     public void testGetSeedInfo() {
-        List<ShopSeedInfo> seedList = shopService.getSeedInfo();
+        User user = userDao.selectById(2);
+        List<ShopSeedInfo> seedList = shopService.getSeedInfo(user);
         Assert.assertEquals(seedList.size(), 2);
     }
 
     @org.junit.Test
     public void testGetFoodInfo() {
-        List<ShopFoodInfo> foodList = shopService.getFoodInfo();
+        User user = userDao.selectById(1);
+        List<ShopFoodInfo> foodList = shopService.getFoodInfo(user);
         Assert.assertEquals(foodList.size(), 1);
     }
 

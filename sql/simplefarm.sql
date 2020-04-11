@@ -137,7 +137,6 @@ create table user_ground(
 
 create table user_well(
 	`user_id` int not null comment '用户ID',
-	`count` int not null comment '水滴数',
 	`reap_datetime` datetime not null comment '上次收获时间',
 	foreign key(user_id) references user(id)
 );

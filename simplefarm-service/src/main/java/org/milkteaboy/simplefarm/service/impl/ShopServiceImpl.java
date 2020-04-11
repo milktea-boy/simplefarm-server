@@ -8,6 +8,7 @@ import org.milkteaboy.simplefarm.service.dto.ShopFoodInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopGoodsInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopSeedInfo;
 import org.milkteaboy.simplefarm.service.exception.ShopException;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,8 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private UserDao userDao;
     @Autowired
+    private UserBuildDao userBuildDao;
+    @Autowired
     private BabyDao babyDao;
     @Autowired
     private SeedDao seedDao;
@@ -37,10 +40,9 @@ public class ShopServiceImpl implements ShopService {
     @Transactional
     @Override
     public void buyBaby(User user, int babyId, int count) {
+        checkUserAndBuildInfo(user);
         if (count <= 0)
             throw new ShopException("数量不能小于1");
-        if (user == null)
-            throw new ShopException("用户信息获取失败");
 
         // 获取幼崽信息
         Baby baby = babyDao.selectById(babyId);
@@ -74,10 +76,9 @@ public class ShopServiceImpl implements ShopService {
     @Transactional
     @Override
     public void buySeed(User user, int seedId, int count) {
+        checkUserAndBuildInfo(user);
         if (count <= 0)
             throw new ShopException("数量不能小于1");
-        if (user == null)
-            throw new ShopException("用户信息获取失败");
 
         // 获取种子信息
         Seed seed = seedDao.selectById(seedId);
@@ -111,14 +112,12 @@ public class ShopServiceImpl implements ShopService {
     @Transactional
     @Override
     public void buyFood(User user, int foodId, int count) {
+        checkUserAndBuildInfo(user);
         if (count <= 0)
             throw new ShopException("数量不能小于1");
         // 过滤水
         if (foodId == 1)
             throw new ShopException("水不可购买");
-
-        if (user == null)
-            throw new ShopException("用户信息获取失败");
 
         // 获取食物信息
         Food food = foodDao.selectById(foodId);
@@ -152,10 +151,9 @@ public class ShopServiceImpl implements ShopService {
     @Transactional
     @Override
     public void sellGoods(User user, int goodsId, int count) {
+        checkUserAndBuildInfo(user);
         if (count <= 0)
             throw new ShopException("数量不能小于1");
-        if (user == null)
-            throw new ShopException("用户信息获取失败");
 
         // 获取可售出货物信息
         List<Warehouse> warehouseList = warehouseDao.selectGoods(user.getId());
@@ -189,7 +187,9 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public List<ShopBabyInfo> getBabyInfo() {
+    public List<ShopBabyInfo> getBabyInfo(User user) {
+        checkUserAndBuildInfo(user);
+
         List<Baby> babyList = babyDao.selectAll();
         List<ShopBabyInfo> babyOutputList = new ArrayList<>();
         for (Baby baby : babyList) {
@@ -202,7 +202,9 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public List<ShopSeedInfo> getSeedInfo() {
+    public List<ShopSeedInfo> getSeedInfo(User user) {
+        checkUserAndBuildInfo(user);
+
         List<Seed> seedList = seedDao.selectAll();
         List<ShopSeedInfo> seedOutputList = new ArrayList<>();
         for (Seed seed : seedList) {
@@ -215,7 +217,9 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public List<ShopFoodInfo> getFoodInfo() {
+    public List<ShopFoodInfo> getFoodInfo(User user) {
+        checkUserAndBuildInfo(user);
+
         List<Food> foodList = foodDao.selectAll();
         // 排除水
         for (Food food : foodList) {
@@ -236,6 +240,8 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public List<ShopGoodsInfo> getUserGoodsInfo(User user) {
+        checkUserAndBuildInfo(user);
+
         List<Warehouse> warehouseList = warehouseDao.selectGoods(user.getId());
         List<ShopGoodsInfo> shopGoodsInfos = new ArrayList<>();
         for (Warehouse warehouse : warehouseList) {
@@ -249,6 +255,22 @@ public class ShopServiceImpl implements ShopService {
         }
 
         return shopGoodsInfos;
+    }
+
+    /**
+     * 检查用户信息和建筑
+     * @param user 用户
+     */
+    private void checkUserAndBuildInfo(User user) {
+        if (user == null)
+            throw new ShopException("用户信息获取失败");
+
+        // 判断建筑是否建造
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), 1);
+        if (userBuild == null)
+            throw new ShopException("获取建筑信息失败");
+        if (userBuild.getLevel() <= 0)
+            throw new ShopException("建筑未建造");
     }
 
 }

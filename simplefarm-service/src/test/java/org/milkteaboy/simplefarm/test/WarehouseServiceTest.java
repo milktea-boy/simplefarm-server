@@ -35,7 +35,7 @@ public class WarehouseServiceTest extends Test {
 
     @org.junit.Test
     public void testGetFoodInfo() {
-        User user = userDao.selectById(2);
+        User user = userDao.selectById(1);
         List<WarehouseFoodInfo> foodInfoList = warehouseService.getFoodInfo(user);
         Assert.assertEquals(foodInfoList.size(), 1);
     }

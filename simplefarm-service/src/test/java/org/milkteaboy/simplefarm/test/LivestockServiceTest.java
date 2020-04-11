@@ -17,7 +17,7 @@ public class LivestockServiceTest extends Test {
 
     @org.junit.Test
     public void testGetLivestockInfo() {
-        User user = userDao.selectById(3);
+        User user = userDao.selectById(1);
         LivestockInfo livestockInfo = livestockService.getLivestockInfo(user, 0);
         Assert.assertEquals(livestockInfo.getState(), 0);
     }

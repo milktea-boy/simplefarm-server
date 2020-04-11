@@ -1,9 +1,6 @@
 package org.milkteaboy.simplefarm.service.impl;
 
-import org.milkteaboy.simplefarm.dao.BabyDao;
-import org.milkteaboy.simplefarm.dao.LivestockLevelinfoDao;
-import org.milkteaboy.simplefarm.dao.UserLivestockDao;
-import org.milkteaboy.simplefarm.dao.WarehouseDao;
+import org.milkteaboy.simplefarm.dao.*;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.BuildService;
 import org.milkteaboy.simplefarm.service.LivestockService;
@@ -26,6 +23,8 @@ import java.util.List;
 @Service("livestockService")
 public class LivestockServiceImpl implements LivestockService {
 
+    @Autowired
+    private UserBuildDao userBuildDao;
     @Autowired
     private LivestockLevelinfoDao livestockLevelinfoDao;
     @Autowired
@@ -80,9 +79,6 @@ public class LivestockServiceImpl implements LivestockService {
 
     @Override
     public LivestockInfo getLivestockInfo(User user, int livestockId) {
-        if (user == null)
-            throw new LivestockException("用户信息获取失败");
-
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
@@ -91,6 +87,8 @@ public class LivestockServiceImpl implements LivestockService {
             buildId = livestockId1;
         if (buildId == -1)
             throw new LivestockException("参数错误");
+
+        checkUserAndBuildInfo(user, livestockId);
 
         LivestockInfo livestockInfo = new LivestockInfo();
         UserLivestock userLivestock = userLivestockDao.selectByUserIdAndBuildId(user.getId(), buildId);
@@ -149,8 +147,6 @@ public class LivestockServiceImpl implements LivestockService {
     public void breed(User user, int livestockId, int babyId, int count) {
         if (count <= 0)
             throw new LivestockException("数量不能小于1");
-        if (user == null)
-            throw new LivestockException("用户信息获取失败");
 
         // 建筑ID转换
         int buildId = -1;
@@ -160,6 +156,8 @@ public class LivestockServiceImpl implements LivestockService {
             buildId = livestockId1;
         if (buildId == -1)
             throw new LivestockException("参数错误");
+
+        checkUserAndBuildInfo(user, livestockId);
 
         // 判断畜舍是否可养殖
         UserLivestock userLivestock = userLivestockDao.selectByUserIdAndBuildId(user.getId(), buildId);
@@ -204,9 +202,6 @@ public class LivestockServiceImpl implements LivestockService {
     @Transactional
     @Override
     public void feed(User user, int livestockId) {
-        if (user == null)
-            throw new LivestockException("用户信息获取失败");
-
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
@@ -215,6 +210,8 @@ public class LivestockServiceImpl implements LivestockService {
             buildId = livestockId1;
         if (buildId == -1)
             throw new LivestockException("参数错误");
+
+        checkUserAndBuildInfo(user, livestockId);
 
         // 判断畜舍是否可喂养
         UserLivestock userLivestock = userLivestockDao.selectByUserIdAndBuildId(user.getId(), buildId);
@@ -248,9 +245,6 @@ public class LivestockServiceImpl implements LivestockService {
 
     @Override
     public LivestockReapInfo reap(User user, int livestockId) {
-        if (user == null)
-            throw new LivestockException("用户信息获取失败");
-
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
@@ -259,6 +253,8 @@ public class LivestockServiceImpl implements LivestockService {
             buildId = livestockId1;
         if (buildId == -1)
             throw new LivestockException("参数错误");
+
+        checkUserAndBuildInfo(user, livestockId);
 
         // 判断畜舍是否可收获
         UserLivestock userLivestock = userLivestockDao.selectByUserIdAndBuildId(user.getId(), buildId);
@@ -307,5 +303,22 @@ public class LivestockServiceImpl implements LivestockService {
         } else {
             throw new LivestockException("未到可收获时间");
         }
+    }
+
+    /**
+     * 检查用户和建筑信息
+     * @param user 用户
+     * @param buildId 建筑ID
+     */
+    private void checkUserAndBuildInfo(User user, int buildId) {
+        if (user == null)
+            throw new LivestockException("用户信息获取失败");
+
+        // 判断建筑是否建造
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), buildId);
+        if (userBuild == null)
+            throw new LivestockException("获取建筑信息失败");
+        if (userBuild.getLevel() <= 0)
+            throw new LivestockException("建筑未建造");
     }
 }

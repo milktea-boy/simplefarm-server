@@ -23,7 +23,7 @@ public class GroundServiceTest extends Test {
 
     @org.junit.Test
     public void testGetGroundInfo() {
-        User user = userDao.selectById(3);
+        User user = userDao.selectById(1);
         GroundInfo groundInfo = groundService.getGroundInfo(user, 0);
         Assert.assertEquals(groundInfo.getState(), 2);
     }

@@ -2,17 +2,14 @@ package org.milkteaboy.simplefarm.service.impl;
 
 import org.milkteaboy.simplefarm.dao.BabyDao;
 import org.milkteaboy.simplefarm.dao.GoodsDao;
+import org.milkteaboy.simplefarm.dao.UserBuildDao;
 import org.milkteaboy.simplefarm.dao.WarehouseDao;
-import org.milkteaboy.simplefarm.entity.Baby;
-import org.milkteaboy.simplefarm.entity.Goods;
-import org.milkteaboy.simplefarm.entity.User;
-import org.milkteaboy.simplefarm.entity.Warehouse;
+import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.WarehouseService;
 import org.milkteaboy.simplefarm.service.dto.WarehouseBabyInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseFoodInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseGoodsInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseSeedInfo;
-import org.milkteaboy.simplefarm.service.exception.ShopException;
 import org.milkteaboy.simplefarm.service.exception.WarehouseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +24,8 @@ import java.util.List;
 public class WarehouseServiceImpl implements WarehouseService {
 
     @Autowired
+    private UserBuildDao userBuildDao;
+    @Autowired
     private WarehouseDao warehouseDao;
     @Autowired
     private BabyDao babyDao;
@@ -35,8 +34,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public List<WarehouseBabyInfo> getBabyInfo(User user) {
-        if (user == null)
-            throw new WarehouseException("用户信息获取失败");
+        checkUserAndBuildInfo(user);
 
         List<Warehouse> warehouseList = warehouseDao.selectBaby(user.getId());
         List<WarehouseBabyInfo> babyInfoList = new ArrayList<>();
@@ -57,8 +55,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public List<WarehouseSeedInfo> getSeedInfo(User user) {
-        if (user == null)
-            throw new WarehouseException("用户信息获取失败");
+        checkUserAndBuildInfo(user);
 
         List<Warehouse> warehouseList = warehouseDao.selectSeed(user.getId());
         List<WarehouseSeedInfo> seedInfoList = new ArrayList<>();
@@ -75,8 +72,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public List<WarehouseFoodInfo> getFoodInfo(User user) {
-        if (user == null)
-            throw new WarehouseException("用户信息获取失败");
+        checkUserAndBuildInfo(user);
 
         List<Warehouse> warehouseList = warehouseDao.selectFood(user.getId());
         List<WarehouseFoodInfo> foodInfoList = new ArrayList<>();
@@ -93,8 +89,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public List<WarehouseGoodsInfo> getGoodsInfo(User user) {
-        if (user == null)
-            throw new WarehouseException("用户信息获取失败");
+        checkUserAndBuildInfo(user);
 
         List<Warehouse> warehouseList = warehouseDao.selectGoods(user.getId());
         List<WarehouseGoodsInfo> goodsInfoList = new ArrayList<>();
@@ -111,5 +106,21 @@ public class WarehouseServiceImpl implements WarehouseService {
         }
 
         return goodsInfoList;
+    }
+
+    /**
+     * 检查用户和建筑信息
+     * @param user 用户
+     */
+    private void checkUserAndBuildInfo(User user) {
+        if (user == null)
+            throw new WarehouseException("用户信息获取失败");
+
+        // 判断建筑是否建造
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), 2);
+        if (userBuild == null)
+            throw new WarehouseException("获取建筑信息失败");
+        if (userBuild.getLevel() <= 0)
+            throw new WarehouseException("建筑未建造");
     }
 }

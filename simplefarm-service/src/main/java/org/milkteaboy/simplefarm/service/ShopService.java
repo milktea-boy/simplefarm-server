@@ -47,21 +47,24 @@ public interface ShopService {
 
     /**
      * 获取可购买的幼崽信息
+     * @param user 用户
      * @return 幼崽列表
      */
-    List<ShopBabyInfo> getBabyInfo();
+    List<ShopBabyInfo> getBabyInfo(User user);
 
     /**
      * 获取可购买的种子信息
+     * @param user 用户
      * @return 种子列表
      */
-    List<ShopSeedInfo> getSeedInfo();
+    List<ShopSeedInfo> getSeedInfo(User user);
 
     /**
      * 获取可购买的食物信息
+     * @param user 用户
      * @return 食物列表
      */
-    List<ShopFoodInfo> getFoodInfo();
+    List<ShopFoodInfo> getFoodInfo(User user);
 
     /**
      * 获取用户货物信息

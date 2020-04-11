@@ -1,12 +1,10 @@
 package org.milkteaboy.simplefarm.service.impl;
 
 import org.milkteaboy.simplefarm.dao.SeedDao;
+import org.milkteaboy.simplefarm.dao.UserBuildDao;
 import org.milkteaboy.simplefarm.dao.UserGroundDao;
 import org.milkteaboy.simplefarm.dao.WarehouseDao;
-import org.milkteaboy.simplefarm.entity.Seed;
-import org.milkteaboy.simplefarm.entity.User;
-import org.milkteaboy.simplefarm.entity.UserGround;
-import org.milkteaboy.simplefarm.entity.Warehouse;
+import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.GroundService;
 import org.milkteaboy.simplefarm.service.WarehouseService;
 import org.milkteaboy.simplefarm.service.dto.GroundInfo;
@@ -26,6 +24,8 @@ import java.util.List;
 @Service("groundService")
 public class GroundServiceImpl implements GroundService {
 
+    @Autowired
+    private UserBuildDao userBuildDao;
     @Autowired
     private UserGroundDao userGroundDao;
     @Autowired
@@ -64,8 +64,7 @@ public class GroundServiceImpl implements GroundService {
 
     @Override
     public GroundInfo getGroundInfo(User user, int groundId) {
-        if (user == null)
-            throw new GroundException("用户信息获取失败");
+        checkUserAndBuildInfo(user, groundId);
 
         GroundInfo groundInfo = new GroundInfo();
         UserGround userGround = userGroundDao.selectByUserIdAndIndex(user.getId(), groundId);
@@ -101,8 +100,7 @@ public class GroundServiceImpl implements GroundService {
     @Transactional
     @Override
     public void sow(User user, int groundId, int seedId) {
-        if (user == null)
-            throw new GroundException("用户信息获取失败");
+        checkUserAndBuildInfo(user, groundId);
 
         // 判断是否可播种
         UserGround userGround = userGroundDao.selectByUserIdAndIndex(user.getId(), groundId);
@@ -136,8 +134,7 @@ public class GroundServiceImpl implements GroundService {
     @Transactional
     @Override
     public void water(User user, int groundId) {
-        if (user == null)
-            throw new GroundException("用户信息获取失败");
+        checkUserAndBuildInfo(user, groundId);
 
         // 判断是否可浇水
         UserGround userGround = userGroundDao.selectByUserIdAndIndex(user.getId(), groundId);
@@ -169,8 +166,7 @@ public class GroundServiceImpl implements GroundService {
     @Transactional
     @Override
     public GroundReapInfo reap(User user, int groundId) {
-        if (user == null)
-            throw new GroundException("用户信息获取失败");
+        checkUserAndBuildInfo(user, groundId);
 
         // 判断是否可收获
         UserGround userGround = userGroundDao.selectByUserIdAndIndex(user.getId(), groundId);
@@ -207,5 +203,30 @@ public class GroundServiceImpl implements GroundService {
         }
 
         return null;
+    }
+
+    /**
+     * 检查用户和建筑信息
+     * @param user 用户
+     * @param groundId 地块ID
+     */
+    private void checkUserAndBuildInfo(User user, int groundId) {
+        if (user == null)
+            throw new GroundException("用户信息获取失败");
+
+        int buildId;
+        if (groundId >= 0 && groundId <= 5)
+            buildId = 5;
+        else if (groundId >= 6 && groundId <= 11)
+            buildId = 6;
+        else
+            throw new GroundException("无此地块");
+
+        // 判断建筑是否建造
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), buildId);
+        if (userBuild == null)
+            throw new GroundException("获取建筑信息失败");
+        if (userBuild.getLevel() <= 0)
+            throw new GroundException("建筑未建造");
     }
 }

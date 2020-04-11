@@ -4,10 +4,7 @@ import org.milkteaboy.simplefarm.dao.AccountDao;
 import org.milkteaboy.simplefarm.dao.UserDao;
 import org.milkteaboy.simplefarm.entity.Account;
 import org.milkteaboy.simplefarm.entity.User;
-import org.milkteaboy.simplefarm.service.AccountService;
-import org.milkteaboy.simplefarm.service.BuildService;
-import org.milkteaboy.simplefarm.service.GroundService;
-import org.milkteaboy.simplefarm.service.LivestockService;
+import org.milkteaboy.simplefarm.service.*;
 import org.milkteaboy.simplefarm.service.exception.AccountException;
 import org.milkteaboy.simplefarm.service.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,8 @@ public class AccountServiceImpl implements AccountService {
     private LivestockService livestockService;
     @Autowired
     private GroundService groundService;
+    @Autowired
+    private WellService wellService;
 
     @Override
     public User login(String username, String password) {
@@ -90,6 +89,8 @@ public class AccountServiceImpl implements AccountService {
         livestockService.initLivestockInfo(user);
         // 插入地块信息
         groundService.initGroundInfo(user);
+        // 插入水井信息
+        wellService.initWellInfo(user);
     }
 
     @Transactional
