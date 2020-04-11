@@ -14,6 +14,7 @@
     <update id="update" parameterType="org.milkteaboy.simplefarm.entity.UserGround">
         update user_ground
         set seed_id=#{seed.id}, water_count=#{waterCount}, sow_datetime=#{sowDatetime}, goods_count=#{goodsCount}
+        where user_id=#{userId} and `index`=#{index}
     </update>
 
     <select id="selectByUserIdAndIndex" resultMap="userGround">

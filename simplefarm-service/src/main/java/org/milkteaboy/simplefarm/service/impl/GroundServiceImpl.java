@@ -8,17 +8,22 @@ import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.entity.UserGround;
 import org.milkteaboy.simplefarm.entity.Warehouse;
 import org.milkteaboy.simplefarm.service.GroundService;
+import org.milkteaboy.simplefarm.service.WarehouseService;
 import org.milkteaboy.simplefarm.service.dto.GroundInfo;
 import org.milkteaboy.simplefarm.service.dto.GroundReapInfo;
+import org.milkteaboy.simplefarm.service.dto.WarehouseSeedInfo;
 import org.milkteaboy.simplefarm.service.exception.GroundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * GroundService实现类
  */
+@Service("groundService")
 public class GroundServiceImpl implements GroundService {
 
     @Autowired
@@ -27,6 +32,8 @@ public class GroundServiceImpl implements GroundService {
     private SeedDao seedDao;
     @Autowired
     private WarehouseDao warehouseDao;
+    @Autowired
+    private WarehouseService warehouseService;
 
     //浇水一次减少秒数
     private int waterReduceSecond = 5;
@@ -57,7 +64,38 @@ public class GroundServiceImpl implements GroundService {
 
     @Override
     public GroundInfo getGroundInfo(User user, int groundId) {
-        return null;
+        if (user == null)
+            throw new GroundException("用户信息获取失败");
+
+        GroundInfo groundInfo = new GroundInfo();
+        UserGround userGround = userGroundDao.selectByUserIdAndIndex(user.getId(), groundId);
+        if (userGround == null)
+            throw new GroundException("获取地块信息失败");
+        // 未种植
+        if (userGround.getSeed() == null) {
+            groundInfo.setState(0);
+            List<WarehouseSeedInfo> warehouseSeedInfoList = warehouseService.getSeedInfo(user);
+            groundInfo.setSeedList(warehouseSeedInfoList);
+        } else {
+            Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * waterReduceSecond * 1000);
+            Date now = new Date();
+            // 可收获
+            if (now.getTime() >= reapDatetime.getTime()) {
+                groundInfo.setState(2);
+                groundInfo.setGoodsId(userGround.getSeed().getGoodsId());
+                groundInfo.setCount(userGround.getGoodsCount());
+            }
+            // 种植中
+            else {
+                groundInfo.setState(1);
+                groundInfo.setStartDateTime(userGround.getSowDatetime());
+                groundInfo.setFinishDateTime(reapDatetime);
+                groundInfo.setWaterCount(userGround.getWaterCount());
+                groundInfo.setWaterMaxCount(userGround.getSeed().getMaxWaterCountCount());
+            }
+        }
+
+        return groundInfo;
     }
 
     @Transactional
@@ -112,6 +150,10 @@ public class GroundServiceImpl implements GroundService {
         Warehouse warehouse = warehouseDao.selectOne(user.getId(), 2, userGround.getSeed().getFoodId());
         if (warehouse == null)
             throw new GroundException("水库存不足");
+        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * waterReduceSecond * 1000);
+        Date now = new Date();
+        if (now.getTime() >= reapDatetime.getTime())
+            throw new GroundException("作物已成熟，无需再浇水");
 
         // 浇水操作
         userGround.setWaterCount(userGround.getWaterCount() + 1);

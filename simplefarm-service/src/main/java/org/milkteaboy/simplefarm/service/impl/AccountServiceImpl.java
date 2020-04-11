@@ -6,6 +6,7 @@ import org.milkteaboy.simplefarm.entity.Account;
 import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.service.AccountService;
 import org.milkteaboy.simplefarm.service.BuildService;
+import org.milkteaboy.simplefarm.service.GroundService;
 import org.milkteaboy.simplefarm.service.LivestockService;
 import org.milkteaboy.simplefarm.service.exception.AccountException;
 import org.milkteaboy.simplefarm.service.util.MD5Util;
@@ -27,6 +28,8 @@ public class AccountServiceImpl implements AccountService {
     private BuildService buildService;
     @Autowired
     private LivestockService livestockService;
+    @Autowired
+    private GroundService groundService;
 
     @Override
     public User login(String username, String password) {
@@ -85,6 +88,8 @@ public class AccountServiceImpl implements AccountService {
         buildService.initBuildInfo(user);
         // 插入畜舍信息
         livestockService.initLivestockInfo(user);
+        // 插入地块信息
+        groundService.initGroundInfo(user);
     }
 
     @Transactional
