@@ -2,6 +2,7 @@ package org.milkteaboy.simplefarm.service;
 
 import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.service.dto.HunterInfo;
+import org.milkteaboy.simplefarm.service.dto.HunterReapInfo;
 
 /**
  * 猎人小屋Service
@@ -30,7 +31,8 @@ public interface HunterService {
     /**
      * 收回猎人
      * @param user 用户
+     * @Return 收获信息
      */
-    void receiveHunter(User user);
+    HunterReapInfo receiveHunter(User user);
 
 }

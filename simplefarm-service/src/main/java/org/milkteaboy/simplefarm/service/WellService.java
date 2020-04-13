@@ -20,4 +20,11 @@ public interface WellService {
      */
     int reap(User user);
 
+    /**
+     * 获取水滴数
+     * @param user 用户
+     * @return 水滴树
+     */
+    int getWaterCount(User user);
+
 }

@@ -11,13 +11,16 @@ public class UserHunter {
     private Integer userId;
     /**放出时间**/
     private Date sendDatetime;
+    /**货物数量**/
+    private Integer goodsCount;
 
     public UserHunter() {
     }
 
-    public UserHunter(Integer userId, Date sendDatetime) {
+    public UserHunter(Integer userId, Date sendDatetime, Integer goodsCount) {
         this.userId = userId;
         this.sendDatetime = sendDatetime;
+        this.goodsCount = goodsCount;
     }
 
     public Integer getUserId() {
@@ -34,5 +37,13 @@ public class UserHunter {
 
     public void setSendDatetime(Date sendDatetime) {
         this.sendDatetime = sendDatetime;
+    }
+
+    public Integer getGoodsCount() {
+        return goodsCount;
+    }
+
+    public void setGoodsCount(Integer goodsCount) {
+        this.goodsCount = goodsCount;
     }
 }

@@ -29,6 +29,8 @@ public class AccountServiceImpl implements AccountService {
     private GroundService groundService;
     @Autowired
     private WellService wellService;
+    @Autowired
+    private HunterService hunterService;
 
     @Override
     public User login(String username, String password) {
@@ -91,6 +93,8 @@ public class AccountServiceImpl implements AccountService {
         groundService.initGroundInfo(user);
         // 插入水井信息
         wellService.initWellInfo(user);
+        // 插入猎人小屋信息
+        hunterService.initHunterInfo(user);
     }
 
     @Transactional

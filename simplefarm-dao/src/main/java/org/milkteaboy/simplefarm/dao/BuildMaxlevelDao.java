@@ -11,5 +11,6 @@ import java.util.List;
 public interface BuildMaxlevelDao {
 
     BuildMaxlevel selectByUserLevelAndBuildId(@Param("userLevel") Integer userLevel, @Param("buildId") Integer buildId);
+    List<BuildMaxlevel> selectByUserLevel(Integer userLevel);
 
 }

@@ -6,6 +6,7 @@ import org.milkteaboy.simplefarm.dao.UserBuildDao;
 import org.milkteaboy.simplefarm.dao.WarehouseDao;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.WarehouseService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.WarehouseBabyInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseFoodInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseGoodsInfo;
@@ -117,7 +118,7 @@ public class WarehouseServiceImpl implements WarehouseService {
             throw new WarehouseException("用户信息获取失败");
 
         // 判断建筑是否建造
-        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), 2);
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), Constant.BUILD_ID_WAREHOUSE);
         if (userBuild == null)
             throw new WarehouseException("获取建筑信息失败");
         if (userBuild.getLevel() <= 0)

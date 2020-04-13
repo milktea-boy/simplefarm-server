@@ -6,6 +6,7 @@ import org.milkteaboy.simplefarm.dao.WarehouseDao;
 import org.milkteaboy.simplefarm.dao.WellLevelinfoDao;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.WellService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.exception.WellException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,40 @@ public class WellServiceImpl implements WellService {
         if (user == null)
             throw new WellException("获取用户信息失败");
 
-        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), 7);
+        UserWell userWell = userWellDao.selectByUserId(user.getId());
+        if (userWell == null)
+            throw new WellException("获取水井信息失败");
+
+        int waterCount = getWaterCount(user);
+
+        // 收获操作
+        userWell.setReapDatetime(new Date());
+        userWellDao.update(userWell);
+
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_FOOD, 1);
+        if (warehouse == null) {
+            warehouse = new Warehouse();
+            warehouse.setUserId(user.getId());
+            warehouse.setObjectType(Constant.OBJECT_TYPE_FOOD);
+            warehouse.setObjectId(1);
+            warehouse.setCount(waterCount);
+
+            warehouseDao.insert(warehouse);
+        } else {
+            warehouse.setCount(warehouse.getCount() + waterCount);
+
+            warehouseDao.update(warehouse);
+        }
+
+        return waterCount;
+    }
+
+    @Override
+    public int getWaterCount(User user) {
+        if (user == null)
+            throw new WellException("获取用户信息失败");
+
+        UserBuild userBuild = userBuildDao.selectByUserIdAndBuildId(user.getId(), Constant.BUILD_ID_WELL);
         if (userBuild == null)
             throw new WellException("获取水井建筑信息失败");
         if (userBuild.getLevel() <= 0)
@@ -64,25 +98,6 @@ public class WellServiceImpl implements WellService {
         int passSecond = (int)(((new Date()).getTime() - userWell.getReapDatetime().getTime()) / 1000);
         int waterCount = passSecond / wellLevelinfo.getReapInterval() * wellLevelinfo.getReapCount();
         waterCount = waterCount > wellLevelinfo.getMaxCount() ? wellLevelinfo.getMaxCount() : waterCount;
-
-        // 收获操作
-        userWell.setReapDatetime(new Date());
-        userWellDao.update(userWell);
-
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 2, 1);
-        if (warehouse == null) {
-            warehouse = new Warehouse();
-            warehouse.setUserId(user.getId());
-            warehouse.setObjectType(2);
-            warehouse.setObjectId(1);
-            warehouse.setCount(waterCount);
-
-            warehouseDao.insert(warehouse);
-        } else {
-            warehouse.setCount(warehouse.getCount() + waterCount);
-
-            warehouseDao.update(warehouse);
-        }
 
         return waterCount;
     }

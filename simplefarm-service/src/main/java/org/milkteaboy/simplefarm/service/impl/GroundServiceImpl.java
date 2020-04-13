@@ -7,6 +7,7 @@ import org.milkteaboy.simplefarm.dao.WarehouseDao;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.GroundService;
 import org.milkteaboy.simplefarm.service.WarehouseService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.GroundInfo;
 import org.milkteaboy.simplefarm.service.dto.GroundReapInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseSeedInfo;
@@ -36,7 +37,7 @@ public class GroundServiceImpl implements GroundService {
     private WarehouseService warehouseService;
 
     //浇水一次减少秒数
-    private int waterReduceSecond = 5;
+    public static final int waterReduceSecond = 5;
 
     @Transactional
     @Override
@@ -111,7 +112,7 @@ public class GroundServiceImpl implements GroundService {
         Seed seed = seedDao.selectById(seedId);
         if (seed == null)
             throw new GroundException("无此种子信息");
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 1, seedId);
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_SEED, seedId);
         if (warehouse == null || warehouse.getCount() <= 0)
             throw new GroundException("种子数量不足");
 
@@ -144,7 +145,7 @@ public class GroundServiceImpl implements GroundService {
             throw new GroundException("此地块未种植植物");
         if (userGround.getWaterCount() >= userGround.getSeed().getMaxWaterCountCount())
             throw new GroundException("当前浇水次数已达上限");
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 2, userGround.getSeed().getFoodId());
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_FOOD, userGround.getSeed().getFoodId());
         if (warehouse == null)
             throw new GroundException("水库存不足");
         Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * waterReduceSecond * 1000);
@@ -179,11 +180,11 @@ public class GroundServiceImpl implements GroundService {
         // 收获操作
         if (now.getTime() >= reapDatetime.getTime()) {
             // 仓库增加货物
-            Warehouse warehouse = warehouseDao.selectOne(user.getId(), 3, userGround.getSeed().getGoodsId());
+            Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_GOODS, userGround.getSeed().getGoodsId());
             if (warehouse == null) {
                 warehouse = new Warehouse();
                 warehouse.setUserId(user.getId());
-                warehouse.setObjectType(3);
+                warehouse.setObjectType(Constant.OBJECT_TYPE_GOODS);
                 warehouse.setObjectId(userGround.getSeed().getGoodsId());
                 warehouse.setCount(userGround.getGoodsCount());
                 warehouseDao.insert(warehouse);
@@ -216,9 +217,9 @@ public class GroundServiceImpl implements GroundService {
 
         int buildId;
         if (groundId >= 0 && groundId <= 5)
-            buildId = 5;
+            buildId = Constant.BUILD_ID_GROUND1;
         else if (groundId >= 6 && groundId <= 11)
-            buildId = 6;
+            buildId = Constant.BUILD_ID_GROUND2;
         else
             throw new GroundException("无此地块");
 

@@ -4,12 +4,12 @@
     
     <insert id="insert" parameterType="org.milkteaboy.simplefarm.entity.UserHunter">
         insert into user_hunter
-        values(#{userId}, #{sendDatetime})
+        values(#{userId}, #{sendDatetime}, #{goodsCount})
     </insert>
 
     <update id="update" parameterType="org.milkteaboy.simplefarm.entity.UserHunter">
         update user_hunter
-        set send_datetime=#{sendDatetime}
+        set send_datetime=#{sendDatetime}, goods_count=#{goodsCount}
         where user_id=#{userId}
     </update>
 

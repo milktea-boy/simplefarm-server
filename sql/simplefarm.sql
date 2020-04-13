@@ -144,5 +144,6 @@ create table user_well(
 create table user_hunter(
 	`user_id` int not null comment '用户ID',
 	`send_datetime` datetime comment '放出时间',
+	`goods_count` int comment '货物数量',
 	foreign key(user_id) references user(id)
 );

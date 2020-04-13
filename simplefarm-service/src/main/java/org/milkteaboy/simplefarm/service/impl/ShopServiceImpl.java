@@ -3,6 +3,7 @@ package org.milkteaboy.simplefarm.service.impl;
 import org.milkteaboy.simplefarm.dao.*;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.ShopService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.ShopBabyInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopFoodInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopGoodsInfo;
@@ -55,7 +56,7 @@ public class ShopServiceImpl implements ShopService {
 
         // 购买操作
         user.setCoin(user.getCoin() - price);
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 0, babyId);
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_BABY, babyId);
         if (warehouse != null) {
             warehouse.setCount(warehouse.getCount() + count);
 
@@ -64,7 +65,7 @@ public class ShopServiceImpl implements ShopService {
         } else {
             warehouse = new Warehouse();
             warehouse.setUserId(user.getId());
-            warehouse.setObjectType(0);
+            warehouse.setObjectType(Constant.OBJECT_TYPE_BABY);
             warehouse.setObjectId(babyId);
             warehouse.setCount(count);
 
@@ -91,7 +92,7 @@ public class ShopServiceImpl implements ShopService {
 
         // 购买操作
         user.setCoin(user.getCoin() - price);
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 1, seedId);
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_SEED, seedId);
         if (warehouse != null) {
             warehouse.setCount(warehouse.getCount() + count);
 
@@ -100,7 +101,7 @@ public class ShopServiceImpl implements ShopService {
         } else {
             warehouse = new Warehouse();
             warehouse.setUserId(user.getId());
-            warehouse.setObjectType(1);
+            warehouse.setObjectType(Constant.OBJECT_TYPE_SEED);
             warehouse.setObjectId(seedId);
             warehouse.setCount(count);
 
@@ -130,7 +131,7 @@ public class ShopServiceImpl implements ShopService {
 
         // 购买操作
         user.setCoin(user.getCoin() - price);
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 2, foodId);
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_FOOD, foodId);
         if (warehouse != null) {
             warehouse.setCount(warehouse.getCount() + count);
 
@@ -139,7 +140,7 @@ public class ShopServiceImpl implements ShopService {
         } else {
             warehouse = new Warehouse();
             warehouse.setUserId(user.getId());
-            warehouse.setObjectType(2);
+            warehouse.setObjectType(Constant.OBJECT_TYPE_FOOD);
             warehouse.setObjectId(foodId);
             warehouse.setCount(count);
 

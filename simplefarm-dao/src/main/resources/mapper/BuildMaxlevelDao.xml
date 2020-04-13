@@ -7,4 +7,9 @@
         where user_level=#{userLevel} and id=#{buildId}
     </select>
 
+    <select id="selectByUserLevel" parameterType="java.lang.Integer" resultType="org.milkteaboy.simplefarm.entity.BuildMaxlevel">
+        select * from build_maxlevel
+        where user_level=#{value}
+    </select>
+
 </mapper>

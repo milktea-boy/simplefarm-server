@@ -9,6 +9,7 @@ import org.milkteaboy.simplefarm.entity.BuildMaxlevel;
 import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.entity.UserBuild;
 import org.milkteaboy.simplefarm.service.BuildService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.exception.BuildException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class BuildServiceImpl implements BuildService {
                 userBuild.setUserId(user.getId());
                 userBuild.setBuildId(i);
                 // 家默认1级，其他默认0级
-                if (i == 0)
+                if (i == Constant.BUILD_ID_HOME)
                     userBuild.setLevel(1);
                 else
                     userBuild.setLevel(0);

@@ -16,6 +16,9 @@ public class BuildMaxlevelDaoTest extends Test {
     public void testSelect() {
         BuildMaxlevel buildMaxlevel = buildMaxlevelDao.selectByUserLevelAndBuildId(1, 0);
         Assert.assertEquals(buildMaxlevel.getMaxLevel().toString(), "1");
+
+        List<BuildMaxlevel> buildMaxlevels = buildMaxlevelDao.selectByUserLevel(1);
+        System.out.println(buildMaxlevels);
     }
 
 }

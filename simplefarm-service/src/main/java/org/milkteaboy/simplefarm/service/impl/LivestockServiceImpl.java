@@ -5,6 +5,7 @@ import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.BuildService;
 import org.milkteaboy.simplefarm.service.LivestockService;
 import org.milkteaboy.simplefarm.service.WarehouseService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.LivestockInfo;
 import org.milkteaboy.simplefarm.service.dto.LivestockReapInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseBabyInfo;
@@ -38,10 +39,8 @@ public class LivestockServiceImpl implements LivestockService {
     @Autowired
     private BuildService buildService;
 
-    private int livestockId0 = 3;
-    private int livestockId1 = 4;
     //喂养一次减少秒数
-    private int feedReduceSecond = 5;
+    public static final int feedReduceSecond = 5;
 
     @Transactional
     @Override
@@ -49,12 +48,12 @@ public class LivestockServiceImpl implements LivestockService {
         if (user == null)
             throw new LivestockException("用户信息获取失败");
 
-        UserLivestock userLivestock0 = userLivestockDao.selectByUserIdAndBuildId(user.getId(), livestockId0);
-        UserLivestock userLivestock1 = userLivestockDao.selectByUserIdAndBuildId(user.getId(), livestockId1);
+        UserLivestock userLivestock0 = userLivestockDao.selectByUserIdAndBuildId(user.getId(), Constant.BUILD_ID_LIVESTOCK1);
+        UserLivestock userLivestock1 = userLivestockDao.selectByUserIdAndBuildId(user.getId(), Constant.BUILD_ID_LIVESTOCK2);
         if (userLivestock0 == null) {
             userLivestock0 = new UserLivestock();
             userLivestock0.setUserId(user.getId());
-            userLivestock0.setBuildId(livestockId0);
+            userLivestock0.setBuildId(Constant.BUILD_ID_LIVESTOCK1);
             userLivestock0.setBabyId(-1);
             userLivestock0.setCount(0);
             userLivestock0.setBreedDatetime(new Date());
@@ -66,7 +65,7 @@ public class LivestockServiceImpl implements LivestockService {
         if (userLivestock1 == null) {
             userLivestock1 = new UserLivestock();
             userLivestock1.setUserId(user.getId());
-            userLivestock1.setBuildId(livestockId1);
+            userLivestock1.setBuildId(Constant.BUILD_ID_LIVESTOCK2);
             userLivestock1.setBabyId(-1);
             userLivestock1.setCount(0);
             userLivestock1.setBreedDatetime(new Date());
@@ -82,9 +81,9 @@ public class LivestockServiceImpl implements LivestockService {
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
-            buildId = livestockId0;
+            buildId = Constant.BUILD_ID_LIVESTOCK1;
         if (livestockId == 1)
-            buildId = livestockId1;
+            buildId = Constant.BUILD_ID_LIVESTOCK2;
         if (buildId == -1)
             throw new LivestockException("参数错误");
 
@@ -151,9 +150,9 @@ public class LivestockServiceImpl implements LivestockService {
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
-            buildId = livestockId0;
+            buildId = Constant.BUILD_ID_LIVESTOCK1;
         if (livestockId == 1)
-            buildId = livestockId1;
+            buildId = Constant.BUILD_ID_LIVESTOCK2;
         if (buildId == -1)
             throw new LivestockException("参数错误");
 
@@ -178,7 +177,7 @@ public class LivestockServiceImpl implements LivestockService {
             throw new LivestockException("幼崽人口超过畜舍人口上限");
 
         // 判断幼崽是否足够
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 0, babyId);
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_BABY, babyId);
         if (warehouse == null)
             throw new LivestockException("幼崽库存为0，请先购买");
         if (warehouse.getCount() < count)
@@ -205,9 +204,9 @@ public class LivestockServiceImpl implements LivestockService {
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
-            buildId = livestockId0;
+            buildId = Constant.BUILD_ID_LIVESTOCK1;
         if (livestockId == 1)
-            buildId = livestockId1;
+            buildId = Constant.BUILD_ID_LIVESTOCK2;
         if (buildId == -1)
             throw new LivestockException("参数错误");
 
@@ -228,7 +227,7 @@ public class LivestockServiceImpl implements LivestockService {
             throw new LivestockException("幼崽已成熟，不可喂养");
         if (userLivestock.getFeedCount() >= baby.getMaxFeedCount())
             throw new LivestockException("喂养次数已达上限");
-        Warehouse warehouse = warehouseDao.selectOne(user.getId(), 2, baby.getFoodId());
+        Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_FOOD, baby.getFoodId());
         if (warehouse == null || warehouse.getCount() < 1)
             throw new LivestockException("食物库存不足");
 
@@ -248,9 +247,9 @@ public class LivestockServiceImpl implements LivestockService {
         // 建筑ID转换
         int buildId = -1;
         if (livestockId == 0)
-            buildId = livestockId0;
+            buildId = Constant.BUILD_ID_LIVESTOCK1;
         if (livestockId == 1)
-            buildId = livestockId1;
+            buildId = Constant.BUILD_ID_LIVESTOCK2;
         if (buildId == -1)
             throw new LivestockException("参数错误");
 
@@ -275,11 +274,11 @@ public class LivestockServiceImpl implements LivestockService {
             livestockReapInfo.setCount(userLivestock.getGoodsCount());
 
             // 仓库增加货物
-            Warehouse warehouse = warehouseDao.selectOne(user.getId(), 3, baby.getGoodsId());
+            Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_GOODS, baby.getGoodsId());
             if (warehouse == null) {
                 warehouse = new Warehouse();
                 warehouse.setUserId(user.getId());
-                warehouse.setObjectType(3);
+                warehouse.setObjectType(Constant.OBJECT_TYPE_GOODS);
                 warehouse.setObjectId(baby.getGoodsId());
                 warehouse.setCount(userLivestock.getGoodsCount());
 
