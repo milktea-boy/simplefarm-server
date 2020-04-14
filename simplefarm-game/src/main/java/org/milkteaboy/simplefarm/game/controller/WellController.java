@@ -24,8 +24,6 @@ public class WellController {
     private SocketServer socketServer;
     @Autowired
     private WellService wellService;
-    @Autowired
-    private UserService userService;
 
     /**
      * 收获水
@@ -40,12 +38,6 @@ public class WellController {
                 map.put("message", "用户未登录");
             } else {
                 int count = wellService.reap(user);
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.WATER_REAP_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "收获成功");
                 map.put("count", count);

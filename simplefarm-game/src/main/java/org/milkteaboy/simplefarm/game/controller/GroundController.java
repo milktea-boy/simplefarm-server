@@ -26,8 +26,6 @@ public class GroundController {
     private SocketServer socketServer;
     @Autowired
     private GroundService groundService;
-    @Autowired
-    private UserService userService;
 
     /**
      * 获取地块信息
@@ -87,12 +85,6 @@ public class GroundController {
                 map.put("message", "用户未登录");
             } else {
                 groundService.sow(user, groundId.intValue(), seedId.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.GROUND_SOW_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "播种成功");
             }
@@ -123,12 +115,6 @@ public class GroundController {
                 map.put("message", "用户未登录");
             } else {
                 GroundReapInfo groundReapInfo = groundService.reap(user, groundId.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.GROUND_REAP_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "收获成功");
                 map.put("id", groundReapInfo.getId());
@@ -161,12 +147,6 @@ public class GroundController {
                 map.put("message", "用户未登录");
             } else {
                 groundService.water(user, groundId.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.GROUND_WATER_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "浇水成功");
             }

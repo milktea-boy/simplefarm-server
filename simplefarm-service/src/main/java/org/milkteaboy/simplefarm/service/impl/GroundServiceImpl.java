@@ -36,6 +36,8 @@ public class GroundServiceImpl implements GroundService {
     private WarehouseDao warehouseDao;
     @Autowired
     private WarehouseService warehouseService;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -128,6 +130,9 @@ public class GroundServiceImpl implements GroundService {
         } else {
             warehouseDao.update(warehouse);
         }
+
+        // 增加经验
+        userService.addUserExp(user, Constant.GROUND_SOW_EXP);
     }
 
     @Transactional
@@ -160,6 +165,9 @@ public class GroundServiceImpl implements GroundService {
         } else {
             warehouseDao.update(warehouse);
         }
+
+        // 增加经验
+        userService.addUserExp(user, Constant.GROUND_WATER_EXP);
     }
 
     @Transactional
@@ -176,7 +184,10 @@ public class GroundServiceImpl implements GroundService {
         Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * Constant.WATER_REDUCE_SECOND * 1000);
         Date now = new Date();
         // 收获操作
+        GroundReapInfo groundReapInfo = new GroundReapInfo();
         if (now.getTime() >= reapDatetime.getTime()) {
+            groundReapInfo.setId(userGround.getSeed().getId());
+            groundReapInfo.setCount(userGround.getGoodsCount());
             // 仓库增加货物
             Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_GOODS, userGround.getSeed().getGoodsId());
             if (warehouse == null) {
@@ -197,11 +208,14 @@ public class GroundServiceImpl implements GroundService {
             userGround.setSowDatetime(new Date());
             userGround.setGoodsCount(0);
             userGroundDao.update(userGround);
+
+            // 增加经验
+            userService.addUserExp(user, Constant.GROUND_REAP_EXP);
         } else {
             throw new GroundException("当前未到可收获时间");
         }
 
-        return null;
+        return groundReapInfo;
     }
 
     /**

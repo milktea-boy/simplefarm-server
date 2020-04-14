@@ -32,6 +32,8 @@ public class BuildServiceImpl implements BuildService {
     private BuildLevelinfoDao buildLevelinfoDao;
     @Autowired
     private UserBuildDao userBuildDao;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -119,6 +121,9 @@ public class BuildServiceImpl implements BuildService {
         userBuild.setLevel(userBuild.getLevel() + 1);
         userDao.update(user);
         userBuildDao.update(userBuild);
+
+        // 增加经验
+        userService.addUserExp(user, Constant.BUILD_UPGRADE_EXP);
     }
 
 }

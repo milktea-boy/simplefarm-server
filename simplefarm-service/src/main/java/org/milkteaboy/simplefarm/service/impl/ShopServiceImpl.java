@@ -38,6 +38,8 @@ public class ShopServiceImpl implements ShopService {
     private FoodDao foodDao;
     @Autowired
     private WarehouseDao warehouseDao;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -148,6 +150,9 @@ public class ShopServiceImpl implements ShopService {
             warehouseDao.insert(warehouse);
             userDao.update(user);
         }
+
+        // 增加经验
+        userService.addUserExp(user, Constant.SELLGOODS_EXP * count);
     }
 
     @Transactional

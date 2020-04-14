@@ -150,12 +150,6 @@ public class GlobalController {
                 map.put("message", "用户未登录");
             } else {
                 buildService.upgrade(user, buildId.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.BUILD_UPGRADE_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "升级成功");
             }

@@ -34,8 +34,6 @@ public class ShopController {
     private ShopService shopService;
     @Autowired
     private BuildService buildService;
-    @Autowired
-    private UserService userService;
 
     /**
      * 获取商店幼崽信息
@@ -289,12 +287,6 @@ public class ShopController {
                 map.put("message", "用户未登录");
             } else {
                 shopService.sellGoods(user, goodsId.intValue(), count.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.SELLGOODS_EXP * count.intValue());
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "购买成功");
             }

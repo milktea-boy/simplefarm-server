@@ -3,6 +3,7 @@ package org.milkteaboy.simplefarm.game.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
+import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.game.constant.StaticData;
 import org.milkteaboy.simplefarm.netty.config.SocketServerBean;
 import org.milkteaboy.simplefarm.netty.constant.Constant;
@@ -50,8 +51,13 @@ public class SocketConfig {
         public void handler(ChannelHandlerContext ctx, SocketActiveType activeType) {
             // 断线退出登录
             if (activeType == SocketActiveType.INACTIVE) {
-                if (StaticData.userInfo.containsKey(ctx))
+                if (StaticData.userInfo.containsKey(ctx)) {
+                    User user = StaticData.userInfo.get(ctx);
+                    if (StaticData.userTempInfo.containsKey(user))
+                        StaticData.userTempInfo.remove(user);
+
                     StaticData.userInfo.remove(ctx);
+                }
             }
         }
     }

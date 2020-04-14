@@ -39,6 +39,8 @@ public class LivestockServiceImpl implements LivestockService {
     private WarehouseService warehouseService;
     @Autowired
     private BuildService buildService;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -194,6 +196,9 @@ public class LivestockServiceImpl implements LivestockService {
 
         warehouseDao.update(warehouse);
         userLivestockDao.update(userLivestock);
+
+        // 增加经验
+        userService.addUserExp(user, Constant.LIVESTOCK_BREED_EXP);
     }
 
     @Transactional
@@ -238,6 +243,9 @@ public class LivestockServiceImpl implements LivestockService {
         } else {
             warehouseDao.update(warehouse);
         }
+
+        // 增加经验
+        userService.addUserExp(user, Constant.LIVESTOCK_FEED_EXP);
     }
 
     @Override
@@ -295,6 +303,9 @@ public class LivestockServiceImpl implements LivestockService {
             userLivestock.setGoodsCount(0);
 
             userLivestockDao.update(userLivestock);
+
+            // 增加经验
+            userService.addUserExp(user, Constant.LIVESTOCK_REAP_EXP);
 
             return livestockReapInfo;
         } else {

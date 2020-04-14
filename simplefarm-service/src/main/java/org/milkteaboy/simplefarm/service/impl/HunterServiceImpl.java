@@ -6,6 +6,7 @@ import org.milkteaboy.simplefarm.dao.UserHunterDao;
 import org.milkteaboy.simplefarm.dao.WarehouseDao;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.HunterService;
+import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.HunterInfo;
 import org.milkteaboy.simplefarm.service.dto.HunterReapInfo;
@@ -30,6 +31,8 @@ public class HunterServiceImpl implements HunterService {
     private HunterLevelinfoDao hunterLevelinfoDao;
     @Autowired
     private WarehouseDao warehouseDao;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -159,6 +162,9 @@ public class HunterServiceImpl implements HunterService {
         userHunter.setSendDatetime(null);
         userHunter.setGoodsCount(null);
         userHunterDao.update(userHunter);
+
+        // 增加经验
+        userService.addUserExp(user, Constant.HUNTER_RECEIVE_EXP);
 
         return hunterReapInfo;
     }

@@ -5,6 +5,8 @@ import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.game.constant.StaticData;
 import org.milkteaboy.simplefarm.netty.socket.SocketServer;
 import org.milkteaboy.simplefarm.service.AccountService;
+import org.milkteaboy.simplefarm.service.UserService;
+import org.milkteaboy.simplefarm.service.dto.UserInfo;
 import org.milkteaboy.simplefarm.service.exception.AccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ public class LoginController {
     private SocketServer socketServer;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 登录
@@ -38,6 +42,16 @@ public class LoginController {
             } else {
                 StaticData.userInfo.put(ctx, user);
             }
+
+            Map<String, Object> userInfoMap = new HashMap<>();
+            UserInfo userInfo = userService.getUserInfo(user);
+            userInfoMap.put("farmInfo", userInfo);
+            if (StaticData.userTempInfo.containsKey(user)) {
+                StaticData.userTempInfo.replace(user, userInfoMap);
+            } else {
+                StaticData.userTempInfo.put(user, userInfoMap);
+            }
+
             map.put("success", true);
             map.put("message", "登录成功");
         } catch (AccountException e) {
@@ -87,7 +101,12 @@ public class LoginController {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
             if (StaticData.userInfo.containsKey(ctx)) {
+                User user = StaticData.userInfo.get(ctx);
+                if (StaticData.userTempInfo.containsKey(user))
+                    StaticData.userTempInfo.remove(user);
+
                 StaticData.userInfo.remove(ctx);
+
                 map.put("success", true);
                 map.put("message", "退出成功");
             } else {

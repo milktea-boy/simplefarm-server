@@ -26,8 +26,6 @@ public class LivestockController {
     private SocketServer socketServer;
     @Autowired
     private LivestockService livestockService;
-    @Autowired
-    private UserService userService;
 
     /**
      * 获取畜舍信息
@@ -90,12 +88,6 @@ public class LivestockController {
                 map.put("message", "用户未登录");
             } else {
                 livestockService.breed(user, livestockId.intValue(), babyId.intValue(), count.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.LIVESTOCK_BREED_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "喂养成功");
             }
@@ -126,12 +118,6 @@ public class LivestockController {
                 map.put("message", "用户未登录");
             } else {
                 LivestockReapInfo livestockReapInfo = livestockService.reap(user, livestockId.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.LIVESTOCK_REAP_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "收获成功");
                 map.put("id", livestockReapInfo.getId());
@@ -164,12 +150,6 @@ public class LivestockController {
                 map.put("message", "用户未登录");
             } else {
                 livestockService.feed(user, livestockId.intValue());
-
-                // 增加经验和升级推送
-                boolean isLevelup = userService.addUserExp(user, Constant.LIVESTOCK_FEED_EXP);
-                if (isLevelup)
-                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
-
                 map.put("success", true);
                 map.put("message", "喂养成功");
             }

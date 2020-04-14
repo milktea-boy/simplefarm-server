@@ -194,11 +194,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean addUserExp(User user, int exp) {
+    public void addUserExp(User user, int exp) {
         if (user == null)
             throw new UserException("用户信息获取失败");
-
-        boolean isLevelUp = false;
 
         UserLevelup userLevelup = userLevelupDao.selectByLevel(user.getLevel());
         if (userLevelup == null)
@@ -211,13 +209,10 @@ public class UserServiceImpl implements UserService {
             } else {
                 newExp = newExp - userLevelup.getExp();
                 newLevel = newLevel + 1;
-                isLevelUp = true;
             }
         }
         user.setExp(newExp);
         user.setLevel(newLevel);
         userDao.update(user);
-
-        return isLevelUp;
     }
 }

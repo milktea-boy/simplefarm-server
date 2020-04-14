@@ -16,4 +16,9 @@ public class StaticData {
      */
     public static Map<ChannelHandlerContext, User> userInfo = new HashMap<ChannelHandlerContext, User>();
 
+    /**
+     * 用户临时信息存储，用于推送判断
+     */
+    public static Map<User, Map<String, Object>> userTempInfo = new HashMap<>();
+
 }

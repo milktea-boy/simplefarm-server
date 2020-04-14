@@ -5,6 +5,7 @@ import org.milkteaboy.simplefarm.dao.UserWellDao;
 import org.milkteaboy.simplefarm.dao.WarehouseDao;
 import org.milkteaboy.simplefarm.dao.WellLevelinfoDao;
 import org.milkteaboy.simplefarm.entity.*;
+import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.WellService;
 import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.exception.WellException;
@@ -28,6 +29,8 @@ public class WellServiceImpl implements WellService {
     private UserBuildDao userBuildDao;
     @Autowired
     private WarehouseDao warehouseDao;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -75,6 +78,9 @@ public class WellServiceImpl implements WellService {
 
             warehouseDao.update(warehouse);
         }
+
+        // 增加经验
+        userService.addUserExp(user, Constant.WATER_REAP_EXP);
 
         return waterCount;
     }
