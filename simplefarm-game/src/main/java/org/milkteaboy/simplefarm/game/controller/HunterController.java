@@ -5,6 +5,8 @@ import org.milkteaboy.simplefarm.entity.User;
 import org.milkteaboy.simplefarm.game.constant.StaticData;
 import org.milkteaboy.simplefarm.netty.socket.SocketServer;
 import org.milkteaboy.simplefarm.service.HunterService;
+import org.milkteaboy.simplefarm.service.UserService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.HunterInfo;
 import org.milkteaboy.simplefarm.service.dto.HunterReapInfo;
 import org.milkteaboy.simplefarm.service.exception.HunterException;
@@ -24,6 +26,8 @@ public class HunterController {
     private SocketServer socketServer;
     @Autowired
     private HunterService hunterService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 获取猎人小屋信息
@@ -106,6 +110,12 @@ public class HunterController {
                 map.put("message", "用户未登录");
             } else {
                 HunterReapInfo hunterReapInfo = hunterService.receiveHunter(user);
+
+                // 增加经验和升级推送
+                boolean isLevelup = userService.addUserExp(user, Constant.HUNTER_RECEIVE_EXP);
+                if (isLevelup)
+                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
+
                 map.put("success", true);
                 map.put("message", "收获成功");
                 map.put("goodsId", hunterReapInfo.getGoodsId());

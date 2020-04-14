@@ -23,4 +23,12 @@ public interface UserService {
      */
     UserDetailInfo getUserDetailInfo(User user);
 
+    /**
+     * 增加用户经验
+     * @param user 用户
+     * @param exp 经验数
+     * @return 是否升级
+     */
+    boolean addUserExp(User user, int exp);
+
 }

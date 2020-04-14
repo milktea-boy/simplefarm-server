@@ -6,6 +6,7 @@ import org.milkteaboy.simplefarm.dao.UserGroundDao;
 import org.milkteaboy.simplefarm.dao.WarehouseDao;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.GroundService;
+import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.WarehouseService;
 import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.GroundInfo;
@@ -35,9 +36,6 @@ public class GroundServiceImpl implements GroundService {
     private WarehouseDao warehouseDao;
     @Autowired
     private WarehouseService warehouseService;
-
-    //浇水一次减少秒数
-    public static final int waterReduceSecond = 5;
 
     @Transactional
     @Override
@@ -77,7 +75,7 @@ public class GroundServiceImpl implements GroundService {
             List<WarehouseSeedInfo> warehouseSeedInfoList = warehouseService.getSeedInfo(user);
             groundInfo.setSeedList(warehouseSeedInfoList);
         } else {
-            Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * waterReduceSecond * 1000);
+            Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * Constant.WATER_REDUCE_SECOND * 1000);
             Date now = new Date();
             // 可收获
             if (now.getTime() >= reapDatetime.getTime()) {
@@ -148,7 +146,7 @@ public class GroundServiceImpl implements GroundService {
         Warehouse warehouse = warehouseDao.selectOne(user.getId(), Constant.OBJECT_TYPE_FOOD, userGround.getSeed().getFoodId());
         if (warehouse == null)
             throw new GroundException("水库存不足");
-        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * waterReduceSecond * 1000);
+        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * Constant.WATER_REDUCE_SECOND * 1000);
         Date now = new Date();
         if (now.getTime() >= reapDatetime.getTime())
             throw new GroundException("作物已成熟，无需再浇水");
@@ -175,7 +173,7 @@ public class GroundServiceImpl implements GroundService {
             throw new GroundException("获取地块信息失败");
         if (userGround.getSeed() == null)
             throw new GroundException("此地块未种植植物");
-        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * waterReduceSecond * 1000);
+        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * Constant.WATER_REDUCE_SECOND * 1000);
         Date now = new Date();
         // 收获操作
         if (now.getTime() >= reapDatetime.getTime()) {

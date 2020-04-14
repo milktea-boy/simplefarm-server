@@ -3,6 +3,7 @@ package org.milkteaboy.simplefarm.service.impl;
 import org.milkteaboy.simplefarm.dao.*;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.ShopService;
+import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.ShopBabyInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopFoodInfo;

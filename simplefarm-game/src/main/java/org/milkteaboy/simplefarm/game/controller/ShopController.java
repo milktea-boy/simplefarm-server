@@ -6,6 +6,8 @@ import org.milkteaboy.simplefarm.game.constant.StaticData;
 import org.milkteaboy.simplefarm.netty.socket.SocketServer;
 import org.milkteaboy.simplefarm.service.BuildService;
 import org.milkteaboy.simplefarm.service.ShopService;
+import org.milkteaboy.simplefarm.service.UserService;
+import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.ShopBabyInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopFoodInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopGoodsInfo;
@@ -32,6 +34,8 @@ public class ShopController {
     private ShopService shopService;
     @Autowired
     private BuildService buildService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 获取商店幼崽信息
@@ -285,6 +289,12 @@ public class ShopController {
                 map.put("message", "用户未登录");
             } else {
                 shopService.sellGoods(user, goodsId.intValue(), count.intValue());
+
+                // 增加经验和升级推送
+                boolean isLevelup = userService.addUserExp(user, Constant.SELLGOODS_EXP * count.intValue());
+                if (isLevelup)
+                    socketServer.sendMessage(ctx, "<levelup>", new HashMap<>());
+
                 map.put("success", true);
                 map.put("message", "购买成功");
             }

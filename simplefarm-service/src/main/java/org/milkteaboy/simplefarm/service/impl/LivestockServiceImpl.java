@@ -4,6 +4,7 @@ import org.milkteaboy.simplefarm.dao.*;
 import org.milkteaboy.simplefarm.entity.*;
 import org.milkteaboy.simplefarm.service.BuildService;
 import org.milkteaboy.simplefarm.service.LivestockService;
+import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.WarehouseService;
 import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.LivestockInfo;
@@ -38,9 +39,6 @@ public class LivestockServiceImpl implements LivestockService {
     private WarehouseService warehouseService;
     @Autowired
     private BuildService buildService;
-
-    //喂养一次减少秒数
-    public static final int feedReduceSecond = 5;
 
     @Transactional
     @Override
@@ -112,7 +110,7 @@ public class LivestockServiceImpl implements LivestockService {
             Baby baby = babyDao.selectById(userLivestock.getBabyId());
             if (baby == null)
                 throw new LivestockException("获取幼崽信息失败");
-            Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * feedReduceSecond * 1000);
+            Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * Constant.FEED_REDUCE_SECOND * 1000);
             Date now = new Date();
             // 可收获
             if (now.getTime() >= reapDatetime.getTime()) {
@@ -221,7 +219,7 @@ public class LivestockServiceImpl implements LivestockService {
         Baby baby = babyDao.selectById(userLivestock.getBabyId());
         if (baby == null)
             throw new LivestockException("获取幼崽信息失败");
-        Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * feedReduceSecond * 1000);
+        Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * Constant.FEED_REDUCE_SECOND * 1000);
         Date now = new Date();
         if (now.getTime() > reapDatetime.getTime())
             throw new LivestockException("幼崽已成熟，不可喂养");
@@ -264,7 +262,7 @@ public class LivestockServiceImpl implements LivestockService {
         Baby baby = babyDao.selectById(userLivestock.getBabyId());
         if (baby == null)
             throw new LivestockException("获取幼崽信息失败");
-        Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * feedReduceSecond * 1000);
+        Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * Constant.FEED_REDUCE_SECOND * 1000);
         Date now = new Date();
 
         // 收获操作

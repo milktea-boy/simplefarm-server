@@ -79,7 +79,7 @@ public class HunterServiceImpl implements HunterService {
             // 已派出，可收获
             else {
                 hunterInfo.setState(2);
-                hunterInfo.setGoodsId(5);
+                hunterInfo.setGoodsId(Constant.HUNTER_GOODSID);
                 hunterInfo.setCount(userHunter.getGoodsCount());
             }
         }
@@ -145,7 +145,7 @@ public class HunterServiceImpl implements HunterService {
             warehouse = new Warehouse();
             warehouse.setUserId(user.getId());
             warehouse.setObjectType(Constant.OBJECT_TYPE_GOODS);
-            warehouse.setObjectId(5);
+            warehouse.setObjectId(Constant.HUNTER_GOODSID);
             warehouse.setCount(userHunter.getGoodsCount());
 
             warehouseDao.insert(warehouse);

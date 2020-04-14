@@ -13,6 +13,7 @@ import org.milkteaboy.simplefarm.service.exception.UserException;
 import org.milkteaboy.simplefarm.service.exception.WellException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +25,8 @@ import java.util.List;
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private UserDao userDao;
     @Autowired
     private UserLevelupDao userLevelupDao;
     @Autowired
@@ -157,7 +160,7 @@ public class UserServiceImpl implements UserService {
                     else {
                         ground.setId(userGround.getSeed().getId());
                         ground.setStartDateTime(userGround.getSowDatetime());
-                        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * GroundServiceImpl.waterReduceSecond * 1000);
+                        Date reapDatetime = new Date(userGround.getSowDatetime().getTime() + userGround.getSeed().getReapInterval() * 1000 - userGround.getWaterCount() * Constant.WATER_REDUCE_SECOND * 1000);
                         ground.setFinishDateTime(reapDatetime);
                     }
                     userGroundList.add(ground);
@@ -187,5 +190,34 @@ public class UserServiceImpl implements UserService {
         userDetailInfo.setNeedExp(levelup.getExp());
 
         return userDetailInfo;
+    }
+
+    @Transactional
+    @Override
+    public boolean addUserExp(User user, int exp) {
+        if (user == null)
+            throw new UserException("用户信息获取失败");
+
+        boolean isLevelUp = false;
+
+        UserLevelup userLevelup = userLevelupDao.selectByLevel(user.getLevel());
+        if (userLevelup == null)
+            throw new UserException("获取用户等级失败");
+        int newExp = user.getExp() + exp;
+        int newLevel = user.getLevel();
+        if (newExp >= userLevelup.getExp()) {
+            if (newExp + 1 > Constant.USER_MAXLEVEL) {
+                newExp = userLevelup.getExp();
+            } else {
+                newExp = newExp - userLevelup.getExp();
+                newLevel = newLevel + 1;
+                isLevelUp = true;
+            }
+        }
+        user.setExp(newExp);
+        user.setLevel(newLevel);
+        userDao.update(user);
+
+        return isLevelUp;
     }
 }
