@@ -18,7 +18,7 @@ public class UserServiceTest extends Test {
 
     @org.junit.Test
     public void testGetInfo() {
-        User user = userDao.selectById(2);
+        User user = userDao.selectById(1);
         UserInfo userInfo = userService.getUserInfo(user);
         System.out.println(userInfo);
     }

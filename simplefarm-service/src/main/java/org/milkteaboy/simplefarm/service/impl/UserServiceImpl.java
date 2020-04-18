@@ -58,6 +58,15 @@ public class UserServiceImpl implements UserService {
         userInfo.setLevel(user.getLevel());
         // 金币数
         userInfo.setCoin(user.getCoin());
+        // 昵称
+        userInfo.setNickname(user.getNickname());
+        // 经验
+        userInfo.setExp(user.getExp());
+        // 升级所需经验
+        UserLevelup levelup = userLevelupDao.selectByLevel(user.getLevel());
+        if (levelup == null)
+            throw new UserException("获取等级信息失败");
+        userInfo.setNeedExp(levelup.getExp());
         // 建筑信息
         List<UserBuild> userBuilds = userBuildDao.selectByUserId(user.getId());
         if (userBuilds == null)

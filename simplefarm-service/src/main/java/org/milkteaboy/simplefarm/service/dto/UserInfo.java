@@ -11,6 +11,12 @@ public class UserInfo {
     private int level;
     /**金币数**/
     private int coin;
+    /**昵称**/
+    private String nickname;
+    /**经验**/
+    private int exp;
+    /**升级所需经验**/
+    private int needExp;
     /**建筑信息**/
     private List<UserBuildInfo> buildInfo;
     /**水井水滴数**/
@@ -25,9 +31,12 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(int level, int coin, List<UserBuildInfo> buildInfo, Integer wellWaterCount, List<UserLivestockInfo> livestockInfo, List<UserGroundInfo> groundInfo, Integer hunterState) {
+    public UserInfo(int level, int coin, String nickname, int exp, int needExp, List<UserBuildInfo> buildInfo, Integer wellWaterCount, List<UserLivestockInfo> livestockInfo, List<UserGroundInfo> groundInfo, Integer hunterState) {
         this.level = level;
         this.coin = coin;
+        this.nickname = nickname;
+        this.exp = exp;
+        this.needExp = needExp;
         this.buildInfo = buildInfo;
         this.wellWaterCount = wellWaterCount;
         this.livestockInfo = livestockInfo;
@@ -49,6 +58,30 @@ public class UserInfo {
 
     public void setCoin(int coin) {
         this.coin = coin;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
+
+    public int getNeedExp() {
+        return needExp;
+    }
+
+    public void setNeedExp(int needExp) {
+        this.needExp = needExp;
     }
 
     public List<UserBuildInfo> getBuildInfo() {

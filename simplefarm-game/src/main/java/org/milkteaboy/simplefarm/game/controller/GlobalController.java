@@ -47,6 +47,9 @@ public class GlobalController {
                 map.put("message", "获取成功");
                 map.put("level", userInfo.getLevel());
                 map.put("coin", userInfo.getCoin());
+                map.put("nickname", userInfo.getNickname());
+                map.put("exp", userInfo.getExp());
+                map.put("needExp", userInfo.getNeedExp());
                 map.put("buildInfo", userInfo.getBuildInfo());
                 if (userInfo.getWellWaterCount() != null)
                     map.put("wellWaterCount", userInfo.getWellWaterCount());
