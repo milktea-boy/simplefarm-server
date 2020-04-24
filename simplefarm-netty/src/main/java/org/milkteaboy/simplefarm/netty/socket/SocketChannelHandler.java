@@ -159,21 +159,21 @@ public class SocketChannelHandler extends ChannelInboundHandlerAdapter {
                 classArray[i] = args[i].getClass();
 
                 if (args[i] instanceof Integer) {
-                    classArray[i] = Double.TYPE;
+                    classArray[i] = Double.class;
                     args[i] = ((Integer) args[i]).doubleValue();
                 } else if (args[i] instanceof Long) {
-                    classArray[i] = Double.TYPE;
+                    classArray[i] = Double.class;
                     args[i] = ((Long) args[i]).doubleValue();
                 } else if (args[i] instanceof Float) {
-                    classArray[i] = Double.TYPE;
+                    classArray[i] = Double.class;
                     args[i] = ((Float) args[i]).doubleValue();
                 } else if (args[i] instanceof Double) {
-                    classArray[i] = Double.TYPE;
+                    classArray[i] = Double.class;
                 } else if (args[i] instanceof BigDecimal) {
-                    classArray[i] = Double.TYPE;
+                    classArray[i] = Double.class;
                     args[i] = ((BigDecimal) args[i]).doubleValue();
                 } else if (args[i] instanceof Boolean) {
-                    classArray[i] = Boolean.TYPE;
+                    classArray[i] = Boolean.class;
                 } else if (args[i] instanceof Map) {
                     classArray[i] = Map.class;
                 } else if (args[i] instanceof ChannelHandlerContext) {

@@ -87,6 +87,7 @@ public class UserServiceImpl implements UserService {
                 }
             }
             userBuildInfo.setMaxLevel(maxLevel);
+            userBuildInfos.add(userBuildInfo);
             //判断建筑是否建立
             if (userBuildInfo.getBuildId() == Constant.BUILD_ID_WELL && userBuildInfo.getLevel() > 0)
                 isWellBuild = true;
