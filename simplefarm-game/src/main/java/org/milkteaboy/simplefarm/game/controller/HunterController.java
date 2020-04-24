@@ -10,6 +10,8 @@ import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.HunterInfo;
 import org.milkteaboy.simplefarm.service.dto.HunterReapInfo;
 import org.milkteaboy.simplefarm.service.exception.HunterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,6 +28,8 @@ public class HunterController {
     private SocketServer socketServer;
     @Autowired
     private HunterService hunterService;
+
+    private static Logger logger = LoggerFactory.getLogger(HunterController.class);
 
     /**
      * 获取猎人小屋信息
@@ -57,11 +61,13 @@ public class HunterController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:hunter/houseInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取猎人小屋信息失败");
             e.printStackTrace();
+            logger.error("method:hunter/houseInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "hunter/houseInfo", map);
     }
@@ -86,11 +92,13 @@ public class HunterController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:hunter/sendHunter,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "放出猎人失败");
             e.printStackTrace();
+            logger.error("method:hunter/sendHunter,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "hunter/sendHunter", map);
     }
@@ -117,11 +125,13 @@ public class HunterController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:hunter/receiveGoods,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "收回猎人失败");
             e.printStackTrace();
+            logger.error("method:hunter/receiveGoods,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "hunter/receiveGoods", map);
     }

@@ -7,6 +7,8 @@ import org.milkteaboy.simplefarm.netty.socket.SocketServer;
 import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.dto.UserBuildInfo;
 import org.milkteaboy.simplefarm.service.dto.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -24,6 +26,8 @@ public class PushController {
 
     @Autowired
     private UserService userService;
+
+    private static Logger logger = LoggerFactory.getLogger(PushController.class);
 
     /**
      * 用户信息推送

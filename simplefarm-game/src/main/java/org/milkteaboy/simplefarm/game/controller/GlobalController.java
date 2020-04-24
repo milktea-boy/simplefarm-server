@@ -11,6 +11,8 @@ import org.milkteaboy.simplefarm.service.dto.UserDetailInfo;
 import org.milkteaboy.simplefarm.service.dto.UserInfo;
 import org.milkteaboy.simplefarm.service.exception.BuildException;
 import org.milkteaboy.simplefarm.service.exception.UserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -29,6 +31,8 @@ public class GlobalController {
     private UserService userService;
     @Autowired
     private BuildService buildService;
+
+    private static Logger logger = LoggerFactory.getLogger(GlobalController.class);
 
     /**
      * 获取农场信息
@@ -64,11 +68,13 @@ public class GlobalController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:global/farmInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取用户信息失败");
             e.printStackTrace();
+            logger.error("method:global/farmInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "global/farmInfo", map);
     }
@@ -99,11 +105,13 @@ public class GlobalController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:global/farmDetailInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取用户详细信息失败");
             e.printStackTrace();
+            logger.error("method:global/farmDetailInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "global/farmDetailInfo", map);
     }
@@ -130,11 +138,13 @@ public class GlobalController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:global/upgradeBuildInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取升级信息失败");
             e.printStackTrace();
+            logger.error("method:global/upgradeBuildInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "global/upgradeBuildInfo", map);
     }
@@ -160,11 +170,13 @@ public class GlobalController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:global/upgradeBuild,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "升级失败");
             e.printStackTrace();
+            logger.error("method:global/upgradeBuild,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "global/upgradeBuild", map);
     }

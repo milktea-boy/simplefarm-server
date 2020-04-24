@@ -8,6 +8,8 @@ import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.WellService;
 import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.exception.WellException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -24,6 +26,8 @@ public class WellController {
     private SocketServer socketServer;
     @Autowired
     private WellService wellService;
+
+    private static Logger logger = LoggerFactory.getLogger(WellController.class);
 
     /**
      * 收获水
@@ -46,11 +50,13 @@ public class WellController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:well/reap,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "收获失败");
             e.printStackTrace();
+            logger.error("method:well/reap,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "well/reap", map);
     }

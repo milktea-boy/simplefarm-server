@@ -10,6 +10,8 @@ import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.GroundInfo;
 import org.milkteaboy.simplefarm.service.dto.GroundReapInfo;
 import org.milkteaboy.simplefarm.service.exception.GroundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,6 +28,8 @@ public class GroundController {
     private SocketServer socketServer;
     @Autowired
     private GroundService groundService;
+
+    private static Logger logger = LoggerFactory.getLogger(GroundController.class);
 
     /**
      * 获取地块信息
@@ -61,11 +65,13 @@ public class GroundController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:ground/groundInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取地块信息失败");
             e.printStackTrace();
+            logger.error("method:ground/groundInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "ground/groundInfo", map);
     }
@@ -92,11 +98,13 @@ public class GroundController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:ground/sow,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "种植失败");
             e.printStackTrace();
+            logger.error("method:ground/sow,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "ground/sow", map);
     }
@@ -124,11 +132,13 @@ public class GroundController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:ground/reap,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "收获失败");
             e.printStackTrace();
+            logger.error("method:ground/reap,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "ground/reap", map);
     }
@@ -154,11 +164,13 @@ public class GroundController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:ground/water,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "浇水失败");
             e.printStackTrace();
+            logger.error("method:ground/water,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "ground/water", map);
     }
