@@ -41,7 +41,7 @@ public class GlobalController {
     public void farmInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -86,7 +86,7 @@ public class GlobalController {
     public void farmDetailInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -124,7 +124,7 @@ public class GlobalController {
     public void upgradeBuildInfo(ChannelHandlerContext ctx, Double buildId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -157,7 +157,7 @@ public class GlobalController {
     public void upgradeBuild(ChannelHandlerContext ctx, Double buildId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");

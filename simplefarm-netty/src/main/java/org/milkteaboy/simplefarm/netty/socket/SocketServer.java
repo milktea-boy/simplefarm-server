@@ -12,6 +12,8 @@ import org.milkteaboy.simplefarm.netty.entity.Message;
 import org.milkteaboy.simplefarm.netty.handler.ISocketActiveHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketErrorEventHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketMessageEventHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +41,8 @@ public class SocketServer {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workGroup;
     private ChannelFuture channelFuture;
+
+    private static Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
     static {
         channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -111,6 +115,7 @@ public class SocketServer {
         message.setContent(json.getBytes());
 
         ctx.channel().writeAndFlush(message);
+        logger.debug("发送消息：{}", json);
     }
 
     /**
@@ -129,6 +134,7 @@ public class SocketServer {
         message.setContent(json.getBytes());
 
         channelGroup.writeAndFlush(message);
+        logger.debug("发送群发消息：{}", json);
     }
 
 }

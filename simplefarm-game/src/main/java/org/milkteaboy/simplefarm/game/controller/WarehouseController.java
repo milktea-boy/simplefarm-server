@@ -43,7 +43,7 @@ public class WarehouseController {
     public void babyInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -82,7 +82,7 @@ public class WarehouseController {
     public void seedInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -121,7 +121,7 @@ public class WarehouseController {
     public void foodInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -160,7 +160,7 @@ public class WarehouseController {
     public void goodInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");

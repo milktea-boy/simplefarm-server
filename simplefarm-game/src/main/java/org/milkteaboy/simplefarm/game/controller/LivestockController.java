@@ -39,7 +39,7 @@ public class LivestockController {
     public void livestockInfo(ChannelHandlerContext ctx, Double livestockId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -88,7 +88,7 @@ public class LivestockController {
     public void breed(ChannelHandlerContext ctx, Double livestockId, Double babyId, Double count) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -120,7 +120,7 @@ public class LivestockController {
     public void reap(ChannelHandlerContext ctx, Double livestockId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -154,7 +154,7 @@ public class LivestockController {
     public void feed(ChannelHandlerContext ctx, Double livestockId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");

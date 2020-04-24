@@ -46,7 +46,7 @@ public class ShopController {
     public void babyInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -85,7 +85,7 @@ public class ShopController {
     public void seedInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -124,7 +124,7 @@ public class ShopController {
     public void foodInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -163,7 +163,7 @@ public class ShopController {
     public void goodsInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -204,7 +204,7 @@ public class ShopController {
     public void buySeed(ChannelHandlerContext ctx, Double seedId, Double count) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -237,7 +237,7 @@ public class ShopController {
     public void buyBaby(ChannelHandlerContext ctx, Double babyId, Double count) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -270,7 +270,7 @@ public class ShopController {
     public void buyFood(ChannelHandlerContext ctx, Double foodId, Double count) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -303,7 +303,7 @@ public class ShopController {
     public void sellGoods(ChannelHandlerContext ctx, Double goodsId, Double count) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");

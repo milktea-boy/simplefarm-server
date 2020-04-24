@@ -41,10 +41,10 @@ public class LoginController {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
             User user = accountService.login(username, password);
-            if (StaticData.userInfo.containsKey(ctx)) {
-                StaticData.userInfo.replace(ctx, user);
+            if (StaticData.userInfo.containsKey(ctx.channel())) {
+                StaticData.userInfo.replace(ctx.channel(), user);
             } else {
-                StaticData.userInfo.put(ctx, user);
+                StaticData.userInfo.put(ctx.channel(), user);
             }
 
             Map<String, Object> userInfoMap = new HashMap<>();
@@ -58,6 +58,7 @@ public class LoginController {
 
             map.put("success", true);
             map.put("message", "登录成功");
+            logger.info("用户登录,userId:{}", user.getId());
         } catch (AccountException e) {
             map.clear();
             map.put("success", false);
@@ -108,15 +109,16 @@ public class LoginController {
     public void logout(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            if (StaticData.userInfo.containsKey(ctx)) {
-                User user = StaticData.userInfo.get(ctx);
+            if (StaticData.userInfo.containsKey(ctx.channel())) {
+                User user = StaticData.userInfo.get(ctx.channel());
                 if (StaticData.userTempInfo.containsKey(user))
                     StaticData.userTempInfo.remove(user);
 
-                StaticData.userInfo.remove(ctx);
+                StaticData.userInfo.remove(ctx.channel());
 
                 map.put("success", true);
                 map.put("message", "退出成功");
+                logger.info("退出登录,userId:{}", user.getId());
             } else {
                 map.put("success", false);
                 map.put("message", "用户未登录");

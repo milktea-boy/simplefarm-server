@@ -14,6 +14,8 @@ import org.milkteaboy.simplefarm.netty.exception.ArgsParseException;
 import org.milkteaboy.simplefarm.netty.handler.ISocketErrorEventHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketMessageEventHandler;
 import org.milkteaboy.simplefarm.netty.util.SpringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 
@@ -28,6 +30,8 @@ import java.util.Map;
  * Socket通道事件处理
  */
 public class SocketChannelHandler extends ChannelInboundHandlerAdapter {
+
+    private static Logger logger = LoggerFactory.getLogger(SocketChannelHandler.class);
 
     // 未收到心跳次数
     private int unRecPingTimes = 0;
@@ -90,12 +94,15 @@ public class SocketChannelHandler extends ChannelInboundHandlerAdapter {
     public void dispatcherMessage(Message message) {
         ISocketErrorEventHandler errorEventHandler = SocketServer.messageErrorHandler;
 
+        String content = null;
         JSONObject jo = null;
         try {
-            jo = JSON.parseObject(new String(message.getContent(), "utf-8"));
+            content = new String(message.getContent(), "utf-8");
+            jo = JSON.parseObject(content);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        logger.debug("收到消息:{}", content);
         String methodName = jo.getString("method");
         Object[] datas = jo.getJSONArray("data").toArray();
         String[] urls = methodName.split("/");

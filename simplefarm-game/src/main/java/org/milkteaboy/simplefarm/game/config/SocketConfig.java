@@ -55,13 +55,13 @@ public class SocketConfig {
         public void handler(ChannelHandlerContext ctx, SocketActiveType activeType) {
             // 断线退出登录
             if (activeType == SocketActiveType.INACTIVE) {
-                if (StaticData.userInfo.containsKey(ctx)) {
-                    User user = StaticData.userInfo.get(ctx);
+                if (StaticData.userInfo.containsKey(ctx.channel())) {
+                    User user = StaticData.userInfo.get(ctx.channel());
                     if (StaticData.userTempInfo.containsKey(user))
                         StaticData.userTempInfo.remove(user);
 
-                    StaticData.userInfo.remove(ctx);
-                    logger.info("userId:{},msg:断开连接", user.getId());
+                    StaticData.userInfo.remove(ctx.channel());
+                    logger.info("断开连接,userId:{}", user.getId());
                 }
             }
         }
@@ -76,9 +76,11 @@ public class SocketConfig {
             if (message.getType() == 99)
                 return;
 
+            String content = null;
             JSONObject jo = null;
             try {
-                jo = JSON.parseObject(new String(message.getContent(), "utf-8"));
+                content = new String(message.getContent(), "utf-8");
+                jo = JSON.parseObject(content);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -86,14 +88,14 @@ public class SocketConfig {
             if (methodName != null) {
                 if (methodName.indexOf("login") != -1)
                     return;
-                if (StaticData.userInfo.containsKey(message.getCtx()))
+                if (StaticData.userInfo.containsKey(message.getCtx().channel()))
                     return;
 
                 Map<String, Object> map = new HashMap();
                 map.put("success", false);
                 map.put("message", "未登录");
                 socketServer.sendMessage(message.getCtx(), methodName, map);
-                logger.info("method:{},msg:未登录操作", methodName);
+                logger.info("未登录操作,method:{}", methodName);
             }
         }
     }
@@ -111,11 +113,11 @@ public class SocketConfig {
                 e.printStackTrace();
             }
             String methodName = jo.getString("method");
-            if (StaticData.userInfo.containsKey(message.getCtx())) {
-                User user = StaticData.userInfo.get(message.getCtx());
-                logger.error("userId:{},method:{},msg:{}", user.getId(), methodName, errorType.getName());
+            if (StaticData.userInfo.containsKey(message.getCtx().channel())) {
+                User user = StaticData.userInfo.get(message.getCtx().channel());
+                logger.error("{},userId:{} method:{}", errorType.getName(), user.getId(), methodName);
             } else {
-                logger.error("method:{},msg:{}", methodName, errorType.getName());
+                logger.error("{},method:{}", errorType.getName(), methodName);
             }
         }
     }

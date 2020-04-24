@@ -2,7 +2,7 @@
 <configuration>
 
     <property name="log_path" value="simplefarm.log"/>
-    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{10} - %msg%n"/>
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n"/>
 
     <!--控制台日志-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -19,13 +19,20 @@
             <maxHistory>10</maxHistory>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>100M</maxFileSize>
+            <maxFileSize>100MB</maxFileSize>
         </triggeringPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+        </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="ERROR">
         <appender-ref ref="console"/>
         <appender-ref ref="rollingFile"/>
     </root>
+
+    <logger name="org.milkteaboy.simplefarm.game" level="DEBUG"/>
+
+    <logger name="org.milkteaboy.simplefarm.netty" level="DEBUG"/>
 
 </configuration>

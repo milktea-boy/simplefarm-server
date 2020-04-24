@@ -36,7 +36,7 @@ public class WellController {
     public void reap(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");

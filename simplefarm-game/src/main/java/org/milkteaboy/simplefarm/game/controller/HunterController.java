@@ -38,7 +38,7 @@ public class HunterController {
     public void houseInfo(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -79,7 +79,7 @@ public class HunterController {
     public void sendHunter(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -110,7 +110,7 @@ public class HunterController {
     public void receiveGoods(ChannelHandlerContext ctx) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");

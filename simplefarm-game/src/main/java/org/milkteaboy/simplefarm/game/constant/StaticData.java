@@ -1,6 +1,6 @@
 package org.milkteaboy.simplefarm.game.constant;
 
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.Channel;
 import org.milkteaboy.simplefarm.entity.User;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class StaticData {
     /**
      * 用户登录信息
      */
-    public static Map<ChannelHandlerContext, User> userInfo = new HashMap<ChannelHandlerContext, User>();
+    public static Map<Channel, User> userInfo = new HashMap<Channel, User>();
 
     /**
      * 用户临时信息存储，用于推送判断

@@ -39,7 +39,7 @@ public class GroundController {
     public void groundInfo(ChannelHandlerContext ctx, Double groundId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -85,7 +85,7 @@ public class GroundController {
     public void sow(ChannelHandlerContext ctx, Double groundId, Double seedId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -117,7 +117,7 @@ public class GroundController {
     public void reap(ChannelHandlerContext ctx, Double groundId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
@@ -151,7 +151,7 @@ public class GroundController {
     public void water(ChannelHandlerContext ctx, Double groundId) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            User user = StaticData.userInfo.get(ctx);
+            User user = StaticData.userInfo.get(ctx.channel());
             if (user == null) {
                 map.put("success", false);
                 map.put("message", "用户未登录");
