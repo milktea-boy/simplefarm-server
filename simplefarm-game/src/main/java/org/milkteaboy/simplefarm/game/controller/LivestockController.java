@@ -10,6 +10,8 @@ import org.milkteaboy.simplefarm.service.constant.Constant;
 import org.milkteaboy.simplefarm.service.dto.LivestockInfo;
 import org.milkteaboy.simplefarm.service.dto.LivestockReapInfo;
 import org.milkteaboy.simplefarm.service.exception.LivestockException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,6 +28,8 @@ public class LivestockController {
     private SocketServer socketServer;
     @Autowired
     private LivestockService livestockService;
+
+    private static Logger logger = LoggerFactory.getLogger(LivestockController.class);
 
     /**
      * 获取畜舍信息
@@ -63,11 +67,13 @@ public class LivestockController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:livestock/livestockInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取畜舍信息失败");
             e.printStackTrace();
+            logger.error("method:livestock/livestockInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "livestock/livestockInfo", map);
     }
@@ -95,11 +101,13 @@ public class LivestockController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:livestock/breed,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "养殖失败");
             e.printStackTrace();
+            logger.error("method:livestock/breed,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "livestock/breed", map);
     }
@@ -127,11 +135,13 @@ public class LivestockController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:livestock/reap,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "收获失败");
             e.printStackTrace();
+            logger.error("method:livestock/reap,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "livestock/reap", map);
     }
@@ -157,11 +167,13 @@ public class LivestockController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:livestock/feed,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "喂养失败");
             e.printStackTrace();
+            logger.error("method:livestock/feed,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "livestock/feed", map);
     }

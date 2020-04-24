@@ -14,6 +14,8 @@ import org.milkteaboy.simplefarm.netty.handler.ISocketActiveHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketErrorEventHandler;
 import org.milkteaboy.simplefarm.netty.handler.ISocketMessageEventHandler;
 import org.milkteaboy.simplefarm.netty.socket.SocketServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +39,8 @@ public class SocketConfig {
     @Resource
     private SocketServer socketServer;
 
+    private static Logger logger = LoggerFactory.getLogger(SocketConfig.class);
+
     @Bean
     public SocketServerBean initSocketServer() {
         SocketServerBean socketServerBean = new SocketServerBean(port, activeHandler, inactiveHandler, beforeDispatcherHandler, errorHandler);
@@ -57,6 +61,7 @@ public class SocketConfig {
                         StaticData.userTempInfo.remove(user);
 
                     StaticData.userInfo.remove(ctx);
+                    logger.info("userId:{},msg:断开连接", user.getId());
                 }
             }
         }
@@ -88,6 +93,7 @@ public class SocketConfig {
                 map.put("success", false);
                 map.put("message", "未登录");
                 socketServer.sendMessage(message.getCtx(), methodName, map);
+                logger.info("method:{},msg:未登录操作", methodName);
             }
         }
     }
@@ -98,7 +104,19 @@ public class SocketConfig {
     class ErrorHandler implements ISocketErrorEventHandler {
         @Override
         public void handler(Message message, SocketErrorType errorType) {
-
+            JSONObject jo = null;
+            try {
+                jo = JSON.parseObject(new String(message.getContent(), "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            String methodName = jo.getString("method");
+            if (StaticData.userInfo.containsKey(message.getCtx())) {
+                User user = StaticData.userInfo.get(message.getCtx());
+                logger.error("userId:{},method:{},msg:{}", user.getId(), methodName, errorType.getName());
+            } else {
+                logger.error("method:{},msg:{}", methodName, errorType.getName());
+            }
         }
     }
 

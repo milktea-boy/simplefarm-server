@@ -8,6 +8,8 @@ import org.milkteaboy.simplefarm.service.AccountService;
 import org.milkteaboy.simplefarm.service.UserService;
 import org.milkteaboy.simplefarm.service.dto.UserInfo;
 import org.milkteaboy.simplefarm.service.exception.AccountException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,6 +28,8 @@ public class LoginController {
     private AccountService accountService;
     @Autowired
     private UserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     /**
      * 登录
@@ -58,11 +62,13 @@ public class LoginController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:login/login,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "登录失败");
             e.printStackTrace();
+            logger.error("method:login/login,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "login/login", map);
     }
@@ -84,11 +90,13 @@ public class LoginController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:login/register,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "注册失败");
             e.printStackTrace();
+            logger.error("method:login/register,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "login/register", map);
     }
@@ -118,6 +126,7 @@ public class LoginController {
             map.put("success", false);
             map.put("message", "退出失败");
             e.printStackTrace();
+            logger.error("method:login/logout,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "login/logout", map);
     }

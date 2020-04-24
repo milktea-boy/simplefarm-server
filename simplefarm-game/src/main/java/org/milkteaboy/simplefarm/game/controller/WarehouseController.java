@@ -12,6 +12,8 @@ import org.milkteaboy.simplefarm.service.dto.WarehouseGoodsInfo;
 import org.milkteaboy.simplefarm.service.dto.WarehouseSeedInfo;
 import org.milkteaboy.simplefarm.service.exception.ShopException;
 import org.milkteaboy.simplefarm.service.exception.WarehouseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -31,6 +33,8 @@ public class WarehouseController {
     private WarehouseService warehouseService;
     @Autowired
     private BuildService buildService;
+
+    private Logger logger = LoggerFactory.getLogger(WarehouseController.class);
 
     /**
      * 获取仓库幼崽信息
@@ -55,15 +59,18 @@ public class WarehouseController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/babyInf,msg:{}", e.getMessage());
         } catch (ShopException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/babyInf,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取幼崽信息失败");
             e.printStackTrace();
+            logger.error("method:warehouse/babyInf,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "warehouse/babyInfo", map);
     }
@@ -91,15 +98,18 @@ public class WarehouseController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/seedInfo,msg:{}", e.getMessage());
         } catch (ShopException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/seedInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取种子信息失败");
             e.printStackTrace();
+            logger.error("method:warehouse/seedInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "warehouse/seedInfo", map);
     }
@@ -127,15 +137,18 @@ public class WarehouseController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/foodInfo,msg:{}", e.getMessage());
         } catch (ShopException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/foodInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取食物信息失败");
             e.printStackTrace();
+            logger.error("method:warehouse/foodInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "warehouse/foodInfo", map);
     }
@@ -163,15 +176,18 @@ public class WarehouseController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/goodInfo,msg:{}", e.getMessage());
         } catch (ShopException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:warehouse/goodInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取货物信息失败");
             e.printStackTrace();
+            logger.error("method:warehouse/goodInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "warehouse/goodInfo", map);
     }

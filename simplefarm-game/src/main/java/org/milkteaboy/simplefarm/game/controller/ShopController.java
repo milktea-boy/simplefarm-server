@@ -14,6 +14,8 @@ import org.milkteaboy.simplefarm.service.dto.ShopGoodsInfo;
 import org.milkteaboy.simplefarm.service.dto.ShopSeedInfo;
 import org.milkteaboy.simplefarm.service.exception.BuildException;
 import org.milkteaboy.simplefarm.service.exception.ShopException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -34,6 +36,8 @@ public class ShopController {
     private ShopService shopService;
     @Autowired
     private BuildService buildService;
+
+    private Logger logger = LoggerFactory.getLogger(ShopController.class);
 
     /**
      * 获取商店幼崽信息
@@ -58,15 +62,18 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/babyInfo,msg:{}", e.getMessage());
         } catch (BuildException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/babyInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取幼崽信息失败");
             e.printStackTrace();
+            logger.error("method:shop/babyInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/babyInfo", map);
     }
@@ -94,15 +101,18 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/seedInfo,msg:{}", e.getMessage());
         } catch (BuildException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/seedInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取种子信息失败");
             e.printStackTrace();
+            logger.error("method:shop/seedInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/seedInfo", map);
     }
@@ -130,15 +140,18 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/foodInfo,msg:{}", e.getMessage());
         } catch (BuildException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/foodInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取食物信息失败");
             e.printStackTrace();
+            logger.error("method:shop/foodInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/foodInfo", map);
     }
@@ -166,15 +179,18 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/goodsInfo,msg:{}", e.getMessage());
         } catch (BuildException e) {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/goodsInfo,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "获取货物信息失败");
             e.printStackTrace();
+            logger.error("method:shop/goodsInfo,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/goodsInfo", map);
     }
@@ -201,11 +217,13 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/buySeed,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "购买种子失败");
             e.printStackTrace();
+            logger.error("method:shop/buySeed,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/buySeed", map);
     }
@@ -232,11 +250,13 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/buyBaby,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "购买幼崽失败");
             e.printStackTrace();
+            logger.error("method:shop/buyBaby,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/buyBaby", map);
     }
@@ -263,11 +283,13 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/buyFood,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "购买食物失败");
             e.printStackTrace();
+            logger.error("method:shop/buyFood,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/buyFood", map);
     }
@@ -294,11 +316,13 @@ public class ShopController {
             map.clear();
             map.put("success", false);
             map.put("message", e.getMessage());
+            logger.error("method:shop/sellGoods,msg:{}", e.getMessage());
         } catch (Exception e) {
             map.clear();
             map.put("success", false);
             map.put("message", "购买食物失败");
             e.printStackTrace();
+            logger.error("method:shop/sellGoods,msg:{}", e.getMessage());
         }
         socketServer.sendMessage(ctx, "shop/sellGoods", map);
     }
