@@ -18,9 +18,6 @@
             <fileNamePattern>simplefarm.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>10</maxHistory>
         </rollingPolicy>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>100MB</maxFileSize>
-        </triggeringPolicy>
         <encoder>
             <pattern>${pattern}</pattern>
         </encoder>
