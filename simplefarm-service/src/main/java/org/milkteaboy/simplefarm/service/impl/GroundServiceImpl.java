@@ -240,6 +240,6 @@ public class GroundServiceImpl implements GroundService {
         if (userBuild == null)
             throw new GroundException("获取建筑信息失败");
         if (userBuild.getLevel() <= 0)
-            throw new GroundException("建筑未建造");
+            throw new GroundException("地块未建造");
     }
 }

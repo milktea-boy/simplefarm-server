@@ -57,9 +57,6 @@ public class SocketConfig {
             if (activeType == SocketActiveType.INACTIVE) {
                 if (StaticData.userInfo.containsKey(ctx.channel())) {
                     User user = StaticData.userInfo.get(ctx.channel());
-                    if (StaticData.userTempInfo.containsKey(user))
-                        StaticData.userTempInfo.remove(user);
-
                     StaticData.userInfo.remove(ctx.channel());
                     logger.info("断开连接,userId:{}", user.getId());
                 }

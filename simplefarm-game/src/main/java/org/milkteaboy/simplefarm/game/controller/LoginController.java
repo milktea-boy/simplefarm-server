@@ -47,15 +47,6 @@ public class LoginController {
                 StaticData.userInfo.put(ctx.channel(), user);
             }
 
-            Map<String, Object> userInfoMap = new HashMap<>();
-            UserInfo userInfo = userService.getUserInfo(user);
-            userInfoMap.put("farmInfo", userInfo);
-            if (StaticData.userTempInfo.containsKey(user)) {
-                StaticData.userTempInfo.replace(user, userInfoMap);
-            } else {
-                StaticData.userTempInfo.put(user, userInfoMap);
-            }
-
             map.put("success", true);
             map.put("message", "登录成功");
             logger.info("用户登录,userId:{}", user.getId());
@@ -111,9 +102,6 @@ public class LoginController {
         try {
             if (StaticData.userInfo.containsKey(ctx.channel())) {
                 User user = StaticData.userInfo.get(ctx.channel());
-                if (StaticData.userTempInfo.containsKey(user))
-                    StaticData.userTempInfo.remove(user);
-
                 StaticData.userInfo.remove(ctx.channel());
 
                 map.put("success", true);

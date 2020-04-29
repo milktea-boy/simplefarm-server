@@ -111,7 +111,7 @@ public class SocketServer {
         Message message = new Message();
         message.setCtx(ctx);
         message.setType(Short.valueOf("0"));
-        String json = JSON.toJSONString(map);
+        String json = JSON.toJSONStringWithDateFormat(map, "yyyy-MM-dd HH:mm:ss");
         message.setContent(json.getBytes());
 
         ctx.channel().writeAndFlush(message);
@@ -130,7 +130,7 @@ public class SocketServer {
 
         Message message = new Message();
         message.setType(Short.valueOf("0"));
-        String json = JSON.toJSONString(map);
+        String json = JSON.toJSONStringWithDateFormat(map, "yyyy-MM-dd HH:mm:ss");
         message.setContent(json.getBytes());
 
         channelGroup.writeAndFlush(message);

@@ -277,7 +277,7 @@ public class ShopServiceImpl implements ShopService {
         if (userBuild == null)
             throw new ShopException("获取建筑信息失败");
         if (userBuild.getLevel() <= 0)
-            throw new ShopException("建筑未建造");
+            throw new ShopException("商店未建造");
     }
 
 }

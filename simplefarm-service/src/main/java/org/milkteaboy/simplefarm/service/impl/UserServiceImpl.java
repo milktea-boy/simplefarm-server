@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private UserGroundDao userGroundDao;
     @Autowired
     private HunterService hunterService;
+    @Autowired
+    private BabyDao babyDao;
 
     @Override
     public UserInfo getUserInfo(User user) {
@@ -150,6 +152,12 @@ public class UserServiceImpl implements UserService {
             throw new UserException("获取用户畜舍信息失败");
         userLivestockInfo.setId(userLivestock.getBabyId());
         userLivestockInfo.setCount(userLivestock.getCount());
+        if (userLivestock.getBabyId() != -1) {
+            Baby baby = babyDao.selectById(userLivestock.getBabyId());
+            Date reapDatetime = new Date(userLivestock.getBreedDatetime().getTime() + baby.getReapInterval() * 1000 - userLivestock.getFeedCount() * Constant.FEED_REDUCE_SECOND * 1000);
+            userLivestockInfo.setStartDateTime(userLivestock.getBreedDatetime());
+            userLivestockInfo.setFinishDateTime(reapDatetime);
+        }
 
         return userLivestockInfo;
     }
@@ -214,7 +222,7 @@ public class UserServiceImpl implements UserService {
         int newExp = user.getExp() + exp;
         int newLevel = user.getLevel();
         if (newExp >= userLevelup.getExp()) {
-            if (newExp + 1 > Constant.USER_MAXLEVEL) {
+            if (newLevel + 1 > Constant.USER_MAXLEVEL) {
                 newExp = userLevelup.getExp();
             } else {
                 newExp = newExp - userLevelup.getExp();

@@ -122,6 +122,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         if (userBuild == null)
             throw new WarehouseException("获取建筑信息失败");
         if (userBuild.getLevel() <= 0)
-            throw new WarehouseException("建筑未建造");
+            throw new WarehouseException("仓库未建造");
     }
 }

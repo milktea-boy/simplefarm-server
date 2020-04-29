@@ -182,6 +182,6 @@ public class HunterServiceImpl implements HunterService {
         if (userBuild == null)
             throw new HunterException("获取建筑信息失败");
         if (userBuild.getLevel() <= 0)
-            throw new HunterException("建筑未建造");
+            throw new HunterException("畜舍未建造");
     }
 }
